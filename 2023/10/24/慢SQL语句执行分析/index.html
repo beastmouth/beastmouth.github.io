@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="大黄">
+    
+    <title>
+        
+            慢SQL语句执行分析 |
+        
+        DH大黄
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"huangbangjing.cn","root":"/","language":"en","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"stay gold","backgound_img":"/images/bg.svg"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                DH大黄
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                CATEGORIES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/links"
+                            >
+                                LINKS
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">CATEGORIES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/links">LINKS</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">慢SQL语句执行分析</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">大黄</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2023-10-24 11:34:59</span>
+        <span class="mobile">2023-10-24 11:34</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/MySQL/">MySQL</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>956 Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>4 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <p>案例中的两张表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `tradelog` (</span><br><span class="line">  `id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `tradeid` <span class="type">varchar</span>(<span class="number">32</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `operator` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `t_modified` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  KEY `tradeid` (`tradeid`),</span><br><span class="line">  KEY `t_modified` (`t_modified`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4;</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `trade_detail` (</span><br><span class="line">  `id` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `tradeid` <span class="type">varchar</span>(<span class="number">32</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">  `trade_step` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>, <span class="comment">/*操作步骤*/</span></span><br><span class="line">  `step_info` <span class="type">varchar</span>(<span class="number">32</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>, <span class="comment">/*步骤信息*/</span></span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  KEY `tradeid` (`tradeid`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> tradelog <span class="keyword">values</span>(<span class="number">1</span>, <span class="string">&#x27;aaaaaaaa&#x27;</span>, <span class="number">1000</span>, now());</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> tradelog <span class="keyword">values</span>(<span class="number">2</span>, <span class="string">&#x27;aaaaaaab&#x27;</span>, <span class="number">1000</span>, now());</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> tradelog <span class="keyword">values</span>(<span class="number">3</span>, <span class="string">&#x27;aaaaaaac&#x27;</span>, <span class="number">1000</span>, now());</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> trade_detail <span class="keyword">values</span>(<span class="number">1</span>, <span class="string">&#x27;aaaaaaaa&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;add&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> trade_detail <span class="keyword">values</span>(<span class="number">2</span>, <span class="string">&#x27;aaaaaaaa&#x27;</span>, <span class="number">2</span>, <span class="string">&#x27;update&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> trade_detail <span class="keyword">values</span>(<span class="number">3</span>, <span class="string">&#x27;aaaaaaaa&#x27;</span>, <span class="number">3</span>, <span class="string">&#x27;commit&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> trade_detail <span class="keyword">values</span>(<span class="number">4</span>, <span class="string">&#x27;aaaaaaab&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;add&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> trade_detail <span class="keyword">values</span>(<span class="number">5</span>, <span class="string">&#x27;aaaaaaab&#x27;</span>, <span class="number">2</span>, <span class="string">&#x27;update&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> trade_detail <span class="keyword">values</span>(<span class="number">6</span>, <span class="string">&#x27;aaaaaaab&#x27;</span>, <span class="number">3</span>, <span class="string">&#x27;update again&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> trade_detail <span class="keyword">values</span>(<span class="number">7</span>, <span class="string">&#x27;aaaaaaab&#x27;</span>, <span class="number">4</span>, <span class="string">&#x27;commit&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> trade_detail <span class="keyword">values</span>(<span class="number">8</span>, <span class="string">&#x27;aaaaaaac&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;add&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> trade_detail <span class="keyword">values</span>(<span class="number">9</span>, <span class="string">&#x27;aaaaaaac&#x27;</span>, <span class="number">2</span>, <span class="string">&#x27;update&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> trade_detail <span class="keyword">values</span>(<span class="number">10</span>, <span class="string">&#x27;aaaaaaac&#x27;</span>, <span class="number">3</span>, <span class="string">&#x27;update again&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> trade_detail <span class="keyword">values</span>(<span class="number">11</span>, <span class="string">&#x27;aaaaaaac&#x27;</span>, <span class="number">4</span>, <span class="string">&#x27;commit&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="条件字段函数操作"><a href="#条件字段函数操作" class="headerlink" title="条件字段函数操作"></a>条件字段函数操作</h1><p>使用上索引但还是执行很慢</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 命中索引，但走全索引扫描</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> tradelog <span class="keyword">where</span> <span class="keyword">month</span>(t_modified) <span class="operator">=</span> <span class="number">7</span>;</span><br></pre></td></tr></table></figure>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/%E6%9D%A1%E4%BB%B6%E5%AD%97%E6%AE%B5%E5%87%BD%E6%95%B0%E6%93%8D%E4%BD%9C-1.png"
+                      alt="image.png"
+                ><br>优化器权衡后依然选择了走索引（t_modified），但是这个索引没有办法通过树搜索功能快速定位，只能全索引扫描(遍历索引树)。无法利用树搜索【原因：在树的根节点就不知道要前往哪个子节点，所以只能全量遍历叶子节点】<br>正确写法</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 命中索引</span></span><br><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">from</span> tradelog <span class="keyword">where</span> (t_modified <span class="operator">&gt;=</span> <span class="string">&#x27;2016-7-1&#x27;</span> <span class="keyword">and</span> t_modified<span class="operator">&lt;</span><span class="string">&#x27;2016-8-1&#x27;</span>) <span class="keyword">or</span> (t_modified <span class="operator">&gt;=</span> <span class="string">&#x27;2017-7-1&#x27;</span> <span class="keyword">and</span> t_modified<span class="operator">&lt;</span><span class="string">&#x27;2017-8-1&#x27;</span>) <span class="keyword">or</span> (t_modified <span class="operator">&gt;=</span> <span class="string">&#x27;2018-7-1&#x27;</span> <span class="keyword">and</span> t_modified<span class="operator">&lt;</span><span class="string">&#x27;2018-8-1&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/%E6%9D%A1%E4%BB%B6%E5%AD%97%E6%AE%B5%E5%87%BD%E6%95%B0%E6%93%8D%E4%BD%9C-2.png"
+                      alt="image.png"
+                ><br>使用索引且利用上树搜索</p>
+<h1 id="隐式类型转换"><a href="#隐式类型转换" class="headerlink" title="隐式类型转换"></a>隐式类型转换</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- tradeid为varchar类型，入参为int类型</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> tradelog <span class="keyword">where</span> tradeid <span class="operator">=</span> <span class="number">110717</span>;</span><br><span class="line"><span class="comment">-- 等价于以下sql，放弃使用索引，遍历全表</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> tradelog <span class="keyword">where</span> <span class="built_in">CAST</span>(tradid <span class="keyword">AS</span> signed <span class="type">int</span>) <span class="operator">=</span> <span class="number">110717</span>;</span><br></pre></td></tr></table></figure>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2-1.png"
+                      alt="image.png"
+                ><br>因为tradeid为varchar类型，而我们的入参是int类型，此时会做一个字符串类型转换的操作<br>那么varchar类型和int类型匹配时，他们的转换规则是什么呢？【结论：字符串和数字做比较的话，是将字符串转换成数字】</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &quot;10&quot; <span class="operator">&gt;</span> <span class="number">9</span>;</span><br></pre></td></tr></table></figure>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2-2.png"
+                      alt="image.png"
+                ><br>那么，当类型转换发生在参数上的时候，又会命中索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> tradelog <span class="keyword">where</span> id <span class="operator">=</span> &quot;1&quot;;</span><br><span class="line"><span class="comment">-- 等价于</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> tradelog <span class="keyword">where</span> id <span class="operator">=</span> <span class="built_in">CAST</span>(&quot;1&quot; <span class="keyword">AS</span> signed <span class="type">int</span>);</span><br></pre></td></tr></table></figure>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2-3.png"
+                      alt="image.png"
+                ><br>补充一个情况，假如我们的字符串中含有不能转换为int的内容，此时会如何转换</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">CAST</span>(&quot;10a&quot; <span class="keyword">AS</span> UNSIGNED <span class="type">INT</span>); 		<span class="comment">-- 结果是10</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">CAST</span>(<span class="string">&#x27;10a1&#x27;</span> <span class="keyword">AS</span> UNSIGNED <span class="type">INT</span>); 		<span class="comment">-- 结果是10</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">CAST</span>(<span class="string">&#x27;a10a1&#x27;</span> <span class="keyword">AS</span> UNSIGNED <span class="type">INT</span>);		<span class="comment">-- 结果是0</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">CAST</span>(<span class="string">&#x27;01a10&#x27;</span> <span class="keyword">AS</span> UNSIGNED <span class="type">INT</span>);		<span class="comment">-- 结果是1</span></span><br></pre></td></tr></table></figure>
+<p>字符串转数字是从最左侧开始识别数字,直到碰到不是数字或者到最后截止,将识别出来是数字的字符串转为数字<br>再补充一个sql注入的例子</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> tradelog <span class="keyword">where</span> tradeid <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"><span class="comment">-- 遇到不能转换被丢弃的数据时, 等价于 0 = 0 =&gt; true</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> tradelog <span class="keyword">where</span> <span class="number">0</span> <span class="operator">=</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2-4.png"
+                      alt="image.png"
+                ></p>
+<h1 id="隐式字符编码转换"><a href="#隐式字符编码转换" class="headerlink" title="隐式字符编码转换"></a>隐式字符编码转换</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> d.<span class="operator">*</span> <span class="keyword">from</span> tradelog l, trade_detail d <span class="keyword">where</span> d.tradeid<span class="operator">=</span>l.tradeid <span class="keyword">and</span> l.id<span class="operator">=</span><span class="number">2</span>;</span><br><span class="line"><span class="comment">-- 等价于 原因：utf8mb4 是 utf8 的超集，此处会进行编码转换【被驱动表进行编码转换】</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> trade_detail  <span class="keyword">where</span> <span class="keyword">CONVERT</span>(traideid <span class="keyword">USING</span> utf8mb4)<span class="operator">=</span>$L2.tradeid.value; </span><br></pre></td></tr></table></figure>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/%E9%9A%90%E5%BC%8F%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E8%BD%AC%E6%8D%A2-1.png"
+                      alt="image.png"
+                ></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">explain <span class="keyword">select</span> l.operator <span class="keyword">from</span> tradelog l , trade_detail d <span class="keyword">where</span> d.tradeid<span class="operator">=</span>l.tradeid <span class="keyword">and</span> d.id<span class="operator">=</span><span class="number">4</span>;</span><br><span class="line"><span class="comment">-- 此时被驱动表为tradelog，tradelog是在入参做编码转换，可以使用上索引</span></span><br><span class="line"><span class="comment">-- 等价于</span></span><br><span class="line"><span class="keyword">select</span> operator <span class="keyword">from</span> tradelog  <span class="keyword">where</span> traideid <span class="operator">=</span><span class="keyword">CONVERT</span>($R4.tradeid.value <span class="keyword">USING</span> utf8mb4); </span><br></pre></td></tr></table></figure>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/%E9%9A%90%E5%BC%8F%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E8%BD%AC%E6%8D%A2-2.png"
+                      alt="image.png"
+                ></p>
+<p>写在最后，1024节日快乐！</p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"26b8e6758f16d4524e69","clientSecret":"ecfd9e9a439bcb8a4c4fd21f4677fa102c68b352","repo":"beastmouth.github.io","owner":"beastmouth","admin":["beastmouth"],"distractionFreeMode":false,"createIssueManually":true};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：慢SQL语句执行分析</li>
+        <li>Post author：大黄</li>
+        <li>Create time：2023-10-24 11:34:59</li>
+        <li>
+            Post link：https://huangbangjing.cn/2023/10/24/慢SQL语句执行分析/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2023/10/24/next-keylock%E5%A4%87%E5%BF%98/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">next-keylock备忘</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2023/10/20/MySQL%E5%88%B7%E8%84%8F%E9%A1%B5/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">MySQL刷脏页</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2023&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">大黄</a>
+        </div>
+        
+            <script async  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+            <div class="icp-info info-item"><a target="_blank" rel="nofollow" href="https://beian.miit.gov.cn">浙ICP备2021039538号-1</a></div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%AD%97%E6%AE%B5%E5%87%BD%E6%95%B0%E6%93%8D%E4%BD%9C"><span class="nav-text">条件字段函数操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-text">隐式类型转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E8%BD%AC%E6%8D%A2"><span class="nav-text">隐式字符编码转换</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","hOffset":-20,"vOffset":-80,"width":200,"height":400},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

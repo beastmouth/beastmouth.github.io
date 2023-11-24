@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="大黄">
+    
+    <title>
+        
+            RocketMQ基础篇Broker存储消息 |
+        
+        DH大黄
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"huangbangjing.cn","root":"/","language":"en","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"stay gold","backgound_img":"/images/bg.svg"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                DH大黄
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                CATEGORIES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/links"
+                            >
+                                LINKS
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">CATEGORIES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/links">LINKS</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">RocketMQ基础篇Broker存储消息</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">大黄</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-08-05 10:10:16</span>
+        <span class="mobile">2022-08-05 10:10</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/RocketMQ/">RocketMQ</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>3.4k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>14 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <p>Broker是如何存储消息的</p>
+<h1 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h1><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://s2.loli.net/2022/08/05/vBGlLp89nDX4ubx.png"
+                      alt="RocketMQ基础篇 Broker存储消息 流程图.png"
+                ></p>
+<h1 id="代码解释"><a href="#代码解释" class="headerlink" title="代码解释"></a>代码解释</h1><h2 id="写入CommitLog"><a href="#写入CommitLog" class="headerlink" title="写入CommitLog"></a>写入CommitLog</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> CompletableFuture&lt;PutMessageResult&gt; <span class="title">asyncPutMessage</span><span class="params">(<span class="keyword">final</span> MessageExtBrokerInner msg)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Set the storage time</span></span><br><span class="line">        msg.setStoreTimestamp(System.currentTimeMillis());</span><br><span class="line">        <span class="comment">// Set the message body BODY CRC (consider the most appropriate setting</span></span><br><span class="line">        <span class="comment">// on the client)</span></span><br><span class="line">        msg.setBodyCRC(UtilAll.crc32(msg.getBody()));</span><br><span class="line">        <span class="comment">// Back to Results</span></span><br><span class="line">        AppendMessageResult result = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        StoreStatsService storeStatsService = <span class="keyword">this</span>.defaultMessageStore.getStoreStatsService();</span><br><span class="line"></span><br><span class="line">        String topic = msg.getTopic();</span><br><span class="line">        <span class="keyword">int</span> queueId = msg.getQueueId();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> tranType = MessageSysFlag.getTransactionValue(msg.getSysFlag());</span><br><span class="line">        <span class="keyword">if</span> (tranType == MessageSysFlag.TRANSACTION_NOT_TYPE</span><br><span class="line">                || tranType == MessageSysFlag.TRANSACTION_COMMIT_TYPE) &#123;</span><br><span class="line">            <span class="comment">// Delay Delivery 延时等级 &gt; 0，替换原有的消费主题为 SCHEDULE_TOPIC_XXXX,队列id 为 延时的等级-1</span></span><br><span class="line">            <span class="keyword">if</span> (msg.getDelayTimeLevel() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (msg.getDelayTimeLevel() &gt; <span class="keyword">this</span>.defaultMessageStore.getScheduleMessageService().getMaxDelayLevel()) &#123;</span><br><span class="line">                    msg.setDelayTimeLevel(<span class="keyword">this</span>.defaultMessageStore.getScheduleMessageService().getMaxDelayLevel());</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                topic = TopicValidator.RMQ_SYS_SCHEDULE_TOPIC;</span><br><span class="line">                queueId = ScheduleMessageService.delayLevel2QueueId(msg.getDelayTimeLevel());</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Backup real topic, queueId</span></span><br><span class="line">                MessageAccessor.putProperty(msg, MessageConst.PROPERTY_REAL_TOPIC, msg.getTopic());</span><br><span class="line">                MessageAccessor.putProperty(msg, MessageConst.PROPERTY_REAL_QUEUE_ID, String.valueOf(msg.getQueueId()));</span><br><span class="line">                msg.setPropertiesString(MessageDecoder.messageProperties2String(msg.getProperties()));</span><br><span class="line"></span><br><span class="line">                msg.setTopic(topic);</span><br><span class="line">                msg.setQueueId(queueId);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        InetSocketAddress bornSocketAddress = (InetSocketAddress) msg.getBornHost();</span><br><span class="line">        <span class="keyword">if</span> (bornSocketAddress.getAddress() <span class="keyword">instanceof</span> Inet6Address) &#123;</span><br><span class="line">            msg.setBornHostV6Flag();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        InetSocketAddress storeSocketAddress = (InetSocketAddress) msg.getStoreHost();</span><br><span class="line">        <span class="keyword">if</span> (storeSocketAddress.getAddress() <span class="keyword">instanceof</span> Inet6Address) &#123;</span><br><span class="line">            msg.setStoreHostAddressV6Flag();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        PutMessageThreadLocal putMessageThreadLocal = <span class="keyword">this</span>.putMessageThreadLocal.get();</span><br><span class="line">        PutMessageResult encodeResult = putMessageThreadLocal.getEncoder().encode(msg);</span><br><span class="line">        <span class="keyword">if</span> (encodeResult != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> CompletableFuture.completedFuture(encodeResult);</span><br><span class="line">        &#125;</span><br><span class="line">        msg.setEncodedBuff(putMessageThreadLocal.getEncoder().encoderBuffer);</span><br><span class="line">        PutMessageContext putMessageContext = <span class="keyword">new</span> PutMessageContext(generateKey(putMessageThreadLocal.getKeyBuilder(), msg));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> elapsedTimeInLock = <span class="number">0</span>;</span><br><span class="line">        MappedFile unlockMappedFile = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 申请 putMessageLock 锁 （将消息存储到CommitLog文件中是串行的）</span></span><br><span class="line">        putMessageLock.lock(); <span class="comment">//spin or ReentrantLock ,depending on store config</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 获取当前可以写入的CommitLog文件</span></span><br><span class="line">            <span class="comment">// CommitLog 存储地址：$&#123;ROCKET_HOME&#125;/store/commitlog 文件默认大小1g。一个文件写满后就再创建另一个文件</span></span><br><span class="line">            MappedFile mappedFile = <span class="keyword">this</span>.mappedFileQueue.getLastMappedFile();</span><br><span class="line">            <span class="keyword">long</span> beginLockTimestamp = <span class="keyword">this</span>.defaultMessageStore.getSystemClock().now();</span><br><span class="line">            <span class="keyword">this</span>.beginTimeInLock = beginLockTimestamp;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Here settings are stored timestamp, in order to ensure an orderly</span></span><br><span class="line">            <span class="comment">// global</span></span><br><span class="line">            msg.setStoreTimestamp(beginLockTimestamp);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//  $&#123;ROCKET_HOME&#125;/store/commitlog 目录下没有任何文件</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">null</span> == mappedFile || mappedFile.isFull()) &#123;</span><br><span class="line">                <span class="comment">// 以偏移量为0 创建commitLog文件</span></span><br><span class="line">                mappedFile = <span class="keyword">this</span>.mappedFileQueue.getLastMappedFile(<span class="number">0</span>); <span class="comment">// Mark: NewFile may be cause noise</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">null</span> == mappedFile) &#123;</span><br><span class="line">                log.error(<span class="string">&quot;create mapped file1 error, topic: &quot;</span> + msg.getTopic() + <span class="string">&quot; clientAddr: &quot;</span> + msg.getBornHostString());</span><br><span class="line">                beginTimeInLock = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">return</span> CompletableFuture.completedFuture(<span class="keyword">new</span> PutMessageResult(PutMessageStatus.CREATE_MAPEDFILE_FAILED, <span class="keyword">null</span>));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            result = mappedFile.appendMessage(msg, <span class="keyword">this</span>.appendMessageCallback, putMessageContext);</span><br><span class="line">            <span class="keyword">switch</span> (result.getStatus()) &#123;</span><br><span class="line">                <span class="keyword">case</span> PUT_OK:</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> END_OF_FILE:</span><br><span class="line">                    unlockMappedFile = mappedFile;</span><br><span class="line">                    <span class="comment">// Create a new file, re-write the message</span></span><br><span class="line">                    mappedFile = <span class="keyword">this</span>.mappedFileQueue.getLastMappedFile(<span class="number">0</span>);</span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">null</span> == mappedFile) &#123;</span><br><span class="line">                        <span class="comment">// <span class="doctag">XXX:</span> warn and notify me</span></span><br><span class="line">                        log.error(<span class="string">&quot;create mapped file2 error, topic: &quot;</span> + msg.getTopic() + <span class="string">&quot; clientAddr: &quot;</span> + msg.getBornHostString());</span><br><span class="line">                        beginTimeInLock = <span class="number">0</span>;</span><br><span class="line">                        <span class="keyword">return</span> CompletableFuture.completedFuture(<span class="keyword">new</span> PutMessageResult(PutMessageStatus.CREATE_MAPEDFILE_FAILED, result));</span><br><span class="line">                    &#125;</span><br><span class="line">                    result = mappedFile.appendMessage(msg, <span class="keyword">this</span>.appendMessageCallback, putMessageContext);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> MESSAGE_SIZE_EXCEEDED:</span><br><span class="line">                <span class="keyword">case</span> PROPERTIES_SIZE_EXCEEDED:</span><br><span class="line">                    beginTimeInLock = <span class="number">0</span>;</span><br><span class="line">                    <span class="keyword">return</span> CompletableFuture.completedFuture(<span class="keyword">new</span> PutMessageResult(PutMessageStatus.MESSAGE_ILLEGAL, result));</span><br><span class="line">                <span class="keyword">case</span> UNKNOWN_ERROR:</span><br><span class="line">                    beginTimeInLock = <span class="number">0</span>;</span><br><span class="line">                    <span class="keyword">return</span> CompletableFuture.completedFuture(<span class="keyword">new</span> PutMessageResult(PutMessageStatus.UNKNOWN_ERROR, result));</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    beginTimeInLock = <span class="number">0</span>;</span><br><span class="line">                    <span class="keyword">return</span> CompletableFuture.completedFuture(<span class="keyword">new</span> PutMessageResult(PutMessageStatus.UNKNOWN_ERROR, result));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            elapsedTimeInLock = <span class="keyword">this</span>.defaultMessageStore.getSystemClock().now() - beginLockTimestamp;</span><br><span class="line">            beginTimeInLock = <span class="number">0</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">// 处理完追加逻辑就会释放锁</span></span><br><span class="line">            putMessageLock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (elapsedTimeInLock &gt; <span class="number">500</span>) &#123;</span><br><span class="line">            log.warn(<span class="string">&quot;[NOTIFYME]putMessage in lock cost time(ms)=&#123;&#125;, bodyLength=&#123;&#125; AppendMessageResult=&#123;&#125;&quot;</span>, elapsedTimeInLock, msg.getBody().length, result);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> != unlockMappedFile &amp;&amp; <span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().isWarmMapedFileEnable()) &#123;</span><br><span class="line">            <span class="keyword">this</span>.defaultMessageStore.unlockMappedFile(unlockMappedFile);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        PutMessageResult putMessageResult = <span class="keyword">new</span> PutMessageResult(PutMessageStatus.PUT_OK, result);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Statistics</span></span><br><span class="line">        storeStatsService.getSinglePutMessageTopicTimesTotal(msg.getTopic()).add(<span class="number">1</span>);</span><br><span class="line">        storeStatsService.getSinglePutMessageTopicSizeTotal(topic).add(result.getWroteBytes());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 刷盘</span></span><br><span class="line">        CompletableFuture&lt;PutMessageStatus&gt; flushResultFuture = submitFlushRequest(result, msg);</span><br><span class="line">        <span class="comment">// 此处会处理主从同步的结果（HA）</span></span><br><span class="line">        CompletableFuture&lt;PutMessageStatus&gt; replicaResultFuture = submitReplicaRequest(result, msg);</span><br><span class="line">        <span class="keyword">return</span> flushResultFuture.thenCombine(replicaResultFuture, (flushStatus, replicaStatus) -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (flushStatus != PutMessageStatus.PUT_OK) &#123;</span><br><span class="line">                putMessageResult.setPutMessageStatus(flushStatus);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (replicaStatus != PutMessageStatus.PUT_OK) &#123;</span><br><span class="line">                putMessageResult.setPutMessageStatus(replicaStatus);</span><br><span class="line">                <span class="keyword">if</span> (replicaStatus == PutMessageStatus.FLUSH_SLAVE_TIMEOUT) &#123;</span><br><span class="line">                    log.error(<span class="string">&quot;do sync transfer other node, wait return, but failed, topic: &#123;&#125; tags: &#123;&#125; client address: &#123;&#125;&quot;</span>,</span><br><span class="line">                            msg.getTopic(), msg.getTags(), msg.getBornHostNameString());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> putMessageResult;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>从代码中，我们可以看到写入CommitLog这个操作主要做了以下几件事情</p>
+<ol>
+<li>设置存储的消息的基本信息<ol>
+<li>如果消息是延时消息，会将原有的消息topic替换为 SCHEDULE_TOPIC_XXXX，队列id为延迟等级</li>
+</ol>
+</li>
+<li>申请putMessageLock（该操作确保了只会有一个线程去对CommitLog进行修改）</li>
+<li>如果CommitLog不存在或者已经写满，需要创建新的CommitLog</li>
+<li>往MappedFile中追加消息（追加消息的时候才会生成消息唯一ID）<ol>
+<li>如果文件剩余空间不足，会创建新的文件 （消息长度 + END_FILE_MIN_BLANK_LENGTH &gt; CommitLog文件空闲空间，返回END_OF_FILE）</li>
+<li>其他的一些异常</li>
+</ol>
+</li>
+<li>追加完消息，释放锁</li>
+</ol>
+<p>那么，这边来解释下CommitLog和MappedFile的关系</p>
+<h1 id="CommitLog和MappedFile的关系"><a href="#CommitLog和MappedFile的关系" class="headerlink" title="CommitLog和MappedFile的关系"></a>CommitLog和MappedFile的关系</h1><h2 id="CommitLog里面有什么"><a href="#CommitLog里面有什么" class="headerlink" title="CommitLog里面有什么"></a>CommitLog里面有什么</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://s2.loli.net/2022/08/05/WKT8hoinbvclp1S.png"
+                      alt="RocketMQ基础篇 Broker存储消息 CommitLog结构.png"
+                ><br>CommitLog里面记录了<strong>消息的完整内容</strong>，我们在读取消息的时候，首先先通过前4个字节记录了当前消息的实际长度，然后再往后读对应的长度，就可以将消息完全读取出来<br>CommitLog文件在磁盘中的存储路径 ${ROCKET_HOME}/store/commitlog/</p>
+<h2 id="CommitLog和MappedFile的关系-1"><a href="#CommitLog和MappedFile的关系-1" class="headerlink" title="CommitLog和MappedFile的关系"></a>CommitLog和MappedFile的关系</h2><p>RocketMQ<strong>采用内存映射文件的方式来提高IO访问性能</strong>，无论是CommitLog，ConsumeQueue还是IndexFile，单个文件都被设置为固定长度。然后<strong>RocketMQ使用MappedFile和MappedFileQueue来封装存储文件</strong>。具体对MappedFile和MappedFileQueue的概念我会在后面在具体介绍</p>
+<h1 id="CommitLog与ConsumeQueue，IndexFile的关系"><a href="#CommitLog与ConsumeQueue，IndexFile的关系" class="headerlink" title="CommitLog与ConsumeQueue，IndexFile的关系"></a>CommitLog与ConsumeQueue，IndexFile的关系</h1><p>既然要探讨ConsumeQueue和IndexFile与CommitLog之间的关系，不如直接来讲一讲这两个文件是干什么用的，从他们的用处中我们也就能够得知<strong>为什么在已经有了CommitLog的情况下，RocketMQ还需要ConsumeQueue和IndexFile这两种文件</strong></p>
+<h2 id="ConsumeQueue"><a href="#ConsumeQueue" class="headerlink" title="ConsumeQueue"></a>ConsumeQueue</h2><p>首先，我们来看看ConsumeQueue的结构</p>
+<h3 id="ConsumeQueue的结构"><a href="#ConsumeQueue的结构" class="headerlink" title="ConsumeQueue的结构"></a>ConsumeQueue的结构</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://s2.loli.net/2022/08/05/SRnOtWmPr3o8iC9.png"
+                      alt="RocketMQ基础篇 Broker存储消息 ConsumeQueue目录结构.png"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://s2.loli.net/2022/08/05/odsMgLr3hYliyHk.png"
+                      alt="RocketMQ基础篇 Broker存储消息 ConsumeQueue结构.png"
+                ><br>从图片中，我们不难看出，RocketMQ对ConsumeQueue的层级目录为<br>ConsumeQueue - 具体的Topic - 具体的某一个队列 - ConsumeQueue的单元 （记录了消息在CommitLog中的偏移量，消息的长度，消息的tags)</p>
+<h3 id="为什么需要CommitLog和ConsumeQueue的映射关系"><a href="#为什么需要CommitLog和ConsumeQueue的映射关系" class="headerlink" title="为什么需要CommitLog和ConsumeQueue的映射关系"></a>为什么需要CommitLog和ConsumeQueue的映射关系</h3><p>那么为什么RocketMQ要设计这样的映射关系呢？主要要从两个方面来考虑，同时这两个方面最终的目的也是为了保证RocketMQ的性能</p>
+<ul>
+<li>写入消息：如果我们没有CommitLog，直接就用一个ConsumeQueue，那么在Producer生产消息给Broker的时候，不同的Topic和队列的消息我们要写到不同的ConsumeQueue文件中。那么就会存在随机写的问题，这样写入消息的效率就会变的非常的低</li>
+<li>读取消息：如果为了保证消息的写入效率，我们将消息存放在CommitLog中，但是，在消费者拉取消息的时候，它肯定是要拉取自己感兴趣的Topic的消息。此时，我们去CommitLog中寻找对应的Topic和对应MessageQueue下对应偏移量的消息，挨个去遍历CommitLog一看就是一个效率非常低的操作。此时我们使用ConsumeQueue就可以快速定位到消息处于哪个CommitLog，他对应的偏移量是多少。这样读取消息的效率就会变得非常的高<h3 id="ConsumeQueue的tag-hashcode"><a href="#ConsumeQueue的tag-hashcode" class="headerlink" title="ConsumeQueue的tag hashcode"></a>ConsumeQueue的tag hashcode</h3>这边补充一点，关于ConsumeQueue中的tag hashcode。<br>在RocketMQ中，我们不仅可以监听我们感兴趣的Topic消息，同时我们还可以只监听Topic下部分的消息。这个操作就是通过消息的tag来实现的（一种实现方式，另外还有类过滤和SQL92过滤的方式）<strong>【RocketMQ服务端过滤根据tag的hashcode】</strong><br>在消费者拉取消息的时候，不仅消费者自己会对消息进行过滤，Broker也会根据消费者的情况对消息进行一次预过滤。此处我们就不展开讲述，具体可以消息消费 <a class="link"   target="_blank" rel="noopener" href="https://www.yuque.com/huangbangjing/qfdni8/vu3u4d" >Consumer消费消息<i class="fas fa-external-link-alt"></i></a> 的文章</li>
+</ul>
+<h2 id="IndexFile"><a href="#IndexFile" class="headerlink" title="IndexFile"></a>IndexFile</h2><h3 id="IndexFile的结构"><a href="#IndexFile的结构" class="headerlink" title="IndexFile的结构"></a>IndexFile的结构</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%9F%BA%E7%A1%80%E7%AF%87%20Broker%E5%AD%98%E5%82%A8%E6%B6%88%E6%81%AF%20IndexFile%E7%BB%93%E6%9E%84.png"
+                      alt="RocketMQ基础篇 Broker存储消息 IndexFile结构.png"
+                ><br>他的目的是为了方便我们根据消息的key快速检索消息，快速检索主要是依靠文件头部的Hash槽。</p>
+<h3 id="哈希冲突的解决"><a href="#哈希冲突的解决" class="headerlink" title="哈希冲突的解决"></a>哈希冲突的解决</h3><p>既然说到了hash，那么就一定会存在哈希冲突的情况。那么，IndexFile是如何解决哈希冲突的呢？<br>在我们写IndexFile的时候，假如IndexFile还有足够的空间，那么我们就会对当前这条消息的消息key进行一次哈希计算，假如对应的hash槽中没有记录对应的index条目偏移量，那么直接将偏移量记录到hash槽中。否则这是在Index条目中的pre index no记录原先的偏移量，然后再将这个条目的偏移量记录到hash槽中</p>
+<h2 id="对于为什么要设计CommitLog，ConsumeQueue，IndexFile的总结"><a href="#对于为什么要设计CommitLog，ConsumeQueue，IndexFile的总结" class="headerlink" title="对于为什么要设计CommitLog，ConsumeQueue，IndexFile的总结"></a>对于为什么要设计CommitLog，ConsumeQueue，IndexFile的总结</h2><p>因为消费者消费消息的时候，是根据具体的Topic去进行消费的。所以为了加快消费者消费的速度，需要根据具体的Topic去存储消息（ConsumeQueue）。但是如果直接把消息存储在ConsumeQueue，会导致生产者发送的消息Topic不同，出现大量随机写的情况。所以为了提高消费者和生产者的速度。相同的，为了加快对消息key检索消息的速度，所以添加了IndexFile<br>RocketMQ首先先将生产者的消息写入到CommitLog中（顺序写），然后在通过一个异步线程将消息基本信息（偏移量等）写入到ConsumeQueue和IndexFile中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ReputMessageService</span> <span class="keyword">extends</span> <span class="title">ServiceThread</span> </span>&#123;</span><br><span class="line">	<span class="comment">// ...省略其他代码</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	    DefaultMessageStore.log.info(<span class="keyword">this</span>.getServiceName() + <span class="string">&quot; service started&quot;</span>);</span><br><span class="line">	</span><br><span class="line">	    <span class="keyword">while</span> (!<span class="keyword">this</span>.isStopped()) &#123;</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	            <span class="comment">// 每执行一次任务推送休息1毫秒，就继续尝试推送消息到消息消费队列和索引文件</span></span><br><span class="line">	            Thread.sleep(<span class="number">1</span>);</span><br><span class="line">	            <span class="comment">// 消息消费转发核心方法</span></span><br><span class="line">	            <span class="keyword">this</span>.doReput();</span><br><span class="line">	        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">	            DefaultMessageStore.log.warn(<span class="keyword">this</span>.getServiceName() + <span class="string">&quot; service has exception. &quot;</span>, e);</span><br><span class="line">	        &#125;</span><br><span class="line">	    &#125;</span><br><span class="line">	</span><br><span class="line">	    DefaultMessageStore.log.info(<span class="keyword">this</span>.getServiceName() + <span class="string">&quot; service end&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// ...省略其他代码</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 最终调用到该方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doDispatch</span><span class="params">(DispatchRequest req)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// CommitLogDispatcher 有三个实现</span></span><br><span class="line">		<span class="comment">// 其中就有我们用到的 CommitLogDispatcherBuildConsumeQueue 写ConsumeQueue</span></span><br><span class="line">		<span class="comment">// CommitLogDispatcherBuildIndex 写IndexFile</span></span><br><span class="line">    <span class="keyword">for</span> (CommitLogDispatcher dispatcher : <span class="keyword">this</span>.dispatcherList) &#123;</span><br><span class="line">        dispatcher.dispatch(req);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="MappedFile和MappedFileQueue"><a href="#MappedFile和MappedFileQueue" class="headerlink" title="MappedFile和MappedFileQueue"></a>MappedFile和MappedFileQueue</h1><h2 id="MappedFile"><a href="#MappedFile" class="headerlink" title="MappedFile"></a>MappedFile</h2><h3 id="为什么需要MappedFile"><a href="#为什么需要MappedFile" class="headerlink" title="为什么需要MappedFile"></a>为什么需要MappedFile</h3><p>RocketMQ底层使用 mmap + write （零拷贝）的方式减少用户态和内存态的切换次数<br>具体内容参考 <a class="link"   target="_blank" rel="noopener" href="https://www.yuque.com/huangbangjing/qfdni8/hurdcg" >mmap解释<i class="fas fa-external-link-alt"></i></a> 这篇文章<br>这里只简单介绍一下：<br>加入没有mmap，我们读取文件需要经历两次数据拷贝，一次是从磁盘拷贝到page cache中，一次从page cache拷贝到用户空间内存。<br>而有了mmap，就<strong>能够减少page cache到用户空间内存的拷贝</strong>，<strong>mmap对page cache和用户空间虚拟地址进行了直接的映射</strong>，<strong>操作虚拟地址就等同于操作page cache</strong></p>
+<h2 id="MappedFileQueue"><a href="#MappedFileQueue" class="headerlink" title="MappedFileQueue"></a>MappedFileQueue</h2><p>MappedFileQueue是MappedFile的管理容器，它是对存储目录的封装<br>比如说在CommitLog文件存储目录下有好多个CommitLog文件，对应在内存中也会有好多个MappedFile对象，而MappedFileQueue就是来管理这些MappedFile对象的</p>
+<h2 id="MappedFile刷盘操作"><a href="#MappedFile刷盘操作" class="headerlink" title="MappedFile刷盘操作"></a>MappedFile刷盘操作</h2><p>消息刷盘有两种：</p>
+<ul>
+<li>同步刷盘：只有在消息真正持久化至磁盘后RocketMQ的Broker端才会真正返回给Producer端一个成功的ACK响应。同步刷盘对MQ消息可靠性来说是一种不错的保障，但是性能上会有较大影响，一般适用于金融业务应用该模式较多。</li>
+<li>异步刷盘：能够充分利用OS的PageCache的优势，只要消息写入PageCache即可将成功的ACK返回给Producer端。消息刷盘采用后台异步线程提交的方式进行，降低了读写延迟，提高了MQ的性能和吞吐量。</li>
+</ul>
+<h1 id="RocketMQ定期删除已经消费的消息文件"><a href="#RocketMQ定期删除已经消费的消息文件" class="headerlink" title="RocketMQ定期删除已经消费的消息文件"></a>RocketMQ定期删除已经消费的消息文件</h1><p>另外，RocketMQ会定时将已经消费的消息从存储文件中删除，以CommitLog为例，第一个CommitLog文件的偏移量不一定 00000000000000000000</p>
+<h2 id="主干逻辑流程图"><a href="#主干逻辑流程图" class="headerlink" title="主干逻辑流程图"></a>主干逻辑流程图</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%9F%BA%E7%A1%80%E7%AF%87%20Broker%E5%AD%98%E5%82%A8%E6%B6%88%E6%81%AF%20%E5%AE%9A%E6%9C%9F%E5%88%A0%E9%99%A4CommitLog.png"
+                      alt="RocketMQ基础篇 Broker存储消息 定期删除CommitLog.png"
+                ></p>
+<h2 id="对应源码和注释"><a href="#对应源码和注释" class="headerlink" title="对应源码和注释"></a>对应源码和注释</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 默认每个文件过期时间为72小时，通过Broker配置文件中设置fileReservedTime来改变</span></span><br><span class="line"><span class="comment">// 如果非当前写文件在一定时间间隔内没有再次被更新，则会被认为是过期文件，可以被删除（RocketMQ不会关注这个文件上的消息是否被全部消费）</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">deleteExpiredFiles</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> deleteCount = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 文件保留时间 72小时</span></span><br><span class="line">    <span class="keyword">long</span> fileReservedTime = DefaultMessageStore.<span class="keyword">this</span>.getMessageStoreConfig().getFileReservedTime();</span><br><span class="line">    <span class="comment">// 删除物理文件的间隔（在一次清除过程中，可能需要删除的文件不止一个，该值指定两次删除文件的时间间隔）</span></span><br><span class="line">    <span class="keyword">int</span> deletePhysicFilesInterval = DefaultMessageStore.<span class="keyword">this</span>.getMessageStoreConfig().getDeleteCommitLogFilesInterval();</span><br><span class="line">    <span class="comment">// 在清除过期文件时，如果该文件被其他线程所占用（引用次数大于0，比如读取消息），此时会阻止此次删除任务</span></span><br><span class="line">    <span class="comment">// 同时在第一次试图删除该文件时记录当前时间戳 destroyMapedFileIntervalForcibly 表示第一次拒绝删除之后能保留的最大时间</span></span><br><span class="line">    <span class="comment">// 在此时间内，同样可以被拒绝删除，同时会将引用减少1000个，超过该时间间隔后，文件将被强制删除</span></span><br><span class="line">    <span class="keyword">int</span> destroyMapedFileIntervalForcibly = DefaultMessageStore.<span class="keyword">this</span>.getMessageStoreConfig().getDestroyMapedFileIntervalForcibly();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指定删除文件的时间点</span></span><br><span class="line">    <span class="keyword">boolean</span> timeup = <span class="keyword">this</span>.isTimeToDelete();</span><br><span class="line">    <span class="comment">// 磁盘空间满了</span></span><br><span class="line">    <span class="keyword">boolean</span> spacefull = <span class="keyword">this</span>.isSpaceToDelete();</span><br><span class="line">    <span class="keyword">boolean</span> manualDelete = <span class="keyword">this</span>.manualDeleteFileSeveralTimes &gt; <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (timeup || spacefull || manualDelete) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (manualDelete)</span><br><span class="line">            <span class="keyword">this</span>.manualDeleteFileSeveralTimes--;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> cleanAtOnce = DefaultMessageStore.<span class="keyword">this</span>.getMessageStoreConfig().isCleanFileForciblyEnable() &amp;&amp; <span class="keyword">this</span>.cleanImmediately;</span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">&quot;begin to delete before &#123;&#125; hours file. timeup: &#123;&#125; spacefull: &#123;&#125; manualDeleteFileSeveralTimes: &#123;&#125; cleanAtOnce: &#123;&#125;&quot;</span>,</span><br><span class="line">                 fileReservedTime,</span><br><span class="line">                 timeup,</span><br><span class="line">                 spacefull,</span><br><span class="line">                 manualDeleteFileSeveralTimes,</span><br><span class="line">                 cleanAtOnce);</span><br><span class="line"></span><br><span class="line">        fileReservedTime *= <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 清除过期文件</span></span><br><span class="line">        deleteCount = DefaultMessageStore.<span class="keyword">this</span>.commitLog.deleteExpiredFile(fileReservedTime, deletePhysicFilesInterval,</span><br><span class="line">                                                                           destroyMapedFileIntervalForcibly, cleanAtOnce);</span><br><span class="line">        <span class="keyword">if</span> (deleteCount &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (spacefull) &#123;</span><br><span class="line">            log.warn(<span class="string">&quot;disk space will be full soon, but delete file failed.&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">deleteExpiredFileByTime</span><span class="params">(<span class="keyword">final</span> <span class="keyword">long</span> expiredTime,</span></span></span><br><span class="line"><span class="params"><span class="function">                                   <span class="keyword">final</span> <span class="keyword">int</span> deleteFilesInterval,</span></span></span><br><span class="line"><span class="params"><span class="function">                                   <span class="keyword">final</span> <span class="keyword">long</span> intervalForcibly,</span></span></span><br><span class="line"><span class="params"><span class="function">                                   <span class="keyword">final</span> <span class="keyword">boolean</span> cleanImmediately)</span> </span>&#123;</span><br><span class="line">    Object[] mfs = <span class="keyword">this</span>.copyMappedFiles(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">null</span> == mfs)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从倒数第二个文件开始</span></span><br><span class="line">    <span class="keyword">int</span> mfsLength = mfs.length - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> deleteCount = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 通过MappedFile，没有磁盘i/o的情况</span></span><br><span class="line">    List&lt;MappedFile&gt; files = <span class="keyword">new</span> ArrayList&lt;MappedFile&gt;();</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">null</span> != mfs) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mfsLength; i++) &#123;</span><br><span class="line">            MappedFile mappedFile = (MappedFile) mfs[i];</span><br><span class="line">            <span class="comment">// 文件最大存活时间=文件的最后一次更新时间+文件存活时间(默认72小时)</span></span><br><span class="line">            <span class="keyword">long</span> liveMaxTimestamp = mappedFile.getLastModifiedTimestamp() + expiredTime;</span><br><span class="line">            <span class="comment">// 当前时间&gt;=最大存活时间 或 需要立即删除</span></span><br><span class="line">            <span class="keyword">if</span> (System.currentTimeMillis() &gt;= liveMaxTimestamp || cleanImmediately) &#123;</span><br><span class="line">                <span class="comment">// 删除文件(将该文件加入到待删除文件列表中，然后统一执行File#delete方法将文件从物理磁盘中删除)</span></span><br><span class="line">                <span class="keyword">if</span> (mappedFile.destroy(intervalForcibly)) &#123;</span><br><span class="line">                    files.add(mappedFile);</span><br><span class="line">                    deleteCount++;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (files.size() &gt;= DELETE_FILES_BATCH_MAX) &#123;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (deleteFilesInterval &gt; <span class="number">0</span> &amp;&amp; (i + <span class="number">1</span>) &lt; mfsLength) &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            Thread.sleep(deleteFilesInterval);</span><br><span class="line">                        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">//avoid deleting files in the middle</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    deleteExpiredFile(files);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> deleteCount;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"26b8e6758f16d4524e69","clientSecret":"ecfd9e9a439bcb8a4c4fd21f4677fa102c68b352","repo":"beastmouth.github.io","owner":"beastmouth","admin":["beastmouth"],"distractionFreeMode":false,"createIssueManually":true};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：RocketMQ基础篇Broker存储消息</li>
+        <li>Post author：大黄</li>
+        <li>Create time：2022-08-05 10:10:16</li>
+        <li>
+            Post link：https://huangbangjing.cn/2022/08/05/RocketMQ基础篇Broker存储消息/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/08/19/Redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Redisson分布式锁</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/08/05/RocketMQ%E5%9F%BA%E7%A1%80%E7%AF%87Consumer%E6%B6%88%E8%B4%B9%E6%B6%88%E6%81%AF/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">RocketMQ基础篇Consumer消费消息</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2023&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">大黄</a>
+        </div>
+        
+            <script async  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+            <div class="icp-info info-item"><a target="_blank" rel="nofollow" href="https://beian.miit.gov.cn">浙ICP备2021039538号-1</a></div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">流程图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A"><span class="nav-text">代码解释</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99%E5%85%A5CommitLog"><span class="nav-text">写入CommitLog</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CommitLog%E5%92%8CMappedFile%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">CommitLog和MappedFile的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CommitLog%E9%87%8C%E9%9D%A2%E6%9C%89%E4%BB%80%E4%B9%88"><span class="nav-text">CommitLog里面有什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CommitLog%E5%92%8CMappedFile%E7%9A%84%E5%85%B3%E7%B3%BB-1"><span class="nav-text">CommitLog和MappedFile的关系</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CommitLog%E4%B8%8EConsumeQueue%EF%BC%8CIndexFile%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-text">CommitLog与ConsumeQueue，IndexFile的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ConsumeQueue"><span class="nav-text">ConsumeQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ConsumeQueue%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-text">ConsumeQueue的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81CommitLog%E5%92%8CConsumeQueue%E7%9A%84%E6%98%A0%E5%B0%84%E5%85%B3%E7%B3%BB"><span class="nav-text">为什么需要CommitLog和ConsumeQueue的映射关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConsumeQueue%E7%9A%84tag-hashcode"><span class="nav-text">ConsumeQueue的tag hashcode</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IndexFile"><span class="nav-text">IndexFile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IndexFile%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-text">IndexFile的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%86%B2%E7%AA%81%E7%9A%84%E8%A7%A3%E5%86%B3"><span class="nav-text">哈希冲突的解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%AE%BE%E8%AE%A1CommitLog%EF%BC%8CConsumeQueue%EF%BC%8CIndexFile%E7%9A%84%E6%80%BB%E7%BB%93"><span class="nav-text">对于为什么要设计CommitLog，ConsumeQueue，IndexFile的总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MappedFile%E5%92%8CMappedFileQueue"><span class="nav-text">MappedFile和MappedFileQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MappedFile"><span class="nav-text">MappedFile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81MappedFile"><span class="nav-text">为什么需要MappedFile</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MappedFileQueue"><span class="nav-text">MappedFileQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MappedFile%E5%88%B7%E7%9B%98%E6%93%8D%E4%BD%9C"><span class="nav-text">MappedFile刷盘操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RocketMQ%E5%AE%9A%E6%9C%9F%E5%88%A0%E9%99%A4%E5%B7%B2%E7%BB%8F%E6%B6%88%E8%B4%B9%E7%9A%84%E6%B6%88%E6%81%AF%E6%96%87%E4%BB%B6"><span class="nav-text">RocketMQ定期删除已经消费的消息文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E5%B9%B2%E9%80%BB%E8%BE%91%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">主干逻辑流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E5%BA%94%E6%BA%90%E7%A0%81%E5%92%8C%E6%B3%A8%E9%87%8A"><span class="nav-text">对应源码和注释</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","hOffset":-20,"vOffset":-80,"width":200,"height":400},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

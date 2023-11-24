@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="大黄">
+    
+    <title>
+        
+            Update语句执行流程 |
+        
+        DH大黄
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"huangbangjing.cn","root":"/","language":"en","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"stay gold","backgound_img":"/images/bg.svg"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                DH大黄
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                CATEGORIES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/links"
+                            >
+                                LINKS
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">CATEGORIES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/links">LINKS</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">Update语句执行流程</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">大黄</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2021-12-26 13:47:21</span>
+        <span class="mobile">2021-12-26 13:47</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/MySQL/">MySQL</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>1.3k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>4 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/Update%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%20%E6%B5%81%E7%A8%8B.png"
+                      alt="Update语句执行流程 流程.jpg"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/Update%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%20%E5%8F%82%E8%80%83.png"
+                      alt="Update语句执行流程 参考.png"
+                ></p>
+<p>先刷redo log盘，然后再删除redo log日志。（redo log刷盘操作是幂等的）</p>
+<hr>
+<!-- 20231009更新 -->
+
+<h1 id="两阶段提交思想"><a href="#两阶段提交思想" class="headerlink" title="两阶段提交思想"></a>两阶段提交思想</h1><p>redo log</p>
+<h1 id="刷脏页"><a href="#刷脏页" class="headerlink" title="刷脏页"></a>刷脏页</h1><p>我们的一条SQL语句，正常执行时速度特别快，但是有的时候不知道为什么，速度特别慢。</p>
+<p>那么可能是因为MySQL在刷脏页导致的（flush）</p>
+<h2 id="首先先介绍下什么是脏页"><a href="#首先先介绍下什么是脏页" class="headerlink" title="首先先介绍下什么是脏页"></a>首先先介绍下什么是脏页</h2><ul>
+<li>脏页：内存数据页跟磁盘数据页内容不一致，我们就会称呼这个内存页为脏页</li>
+<li>干净页：内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了。</li>
+</ul>
+<h2 id="刷脏页的几种情况"><a href="#刷脏页的几种情况" class="headerlink" title="刷脏页的几种情况"></a>刷脏页的几种情况</h2><ul>
+<li>redo log写满了，此时系统会停止所有更新操作，把checkpoint向前推进，redo log留出空间后才能继续写（redo log是个环形，会涉及到删除原有的内容）</li>
+<li>需要记录的数据太多，内存页不够，需要淘汰一些数据页，空出内存给别的数据页使用。淘汰的是脏页的话，就要先将脏页写到磁盘中</li>
+<li>MySQL认为系统空闲的时候，会刷脏页</li>
+<li>MySQL正常关闭的时候，会刷脏页</li>
+</ul>
+<h1 id="MVCC（MySQL隔离性的保证）"><a href="#MVCC（MySQL隔离性的保证）" class="headerlink" title="MVCC（MySQL隔离性的保证）"></a>MVCC（MySQL隔离性的保证）</h1><p>相关概念</p>
+<p>视图：InnoDB在实现MVCC时用到的一致性读视图（consistent read view，用于支持RC和RR隔离级别的实现），此处要与查询语句的虚拟表视图（view）区分</p>
+<h2 id="多版本和row-trx-id"><a href="#多版本和row-trx-id" class="headerlink" title="多版本和row trx_id"></a>多版本和row trx_id</h2><p>为了保证可重复度，事务在启动时需要对数据库拍一个快照。但是对整个数据库的数据备份一份，无疑是一个很耗性能的工作。那么InnoDB是如何保证可重复度的呢？</p>
+<p>基于版本号与undolog</p>
+<p>InnoDB每个事务都有一个唯一的事务ID（transaction id），在事务启动时向InnoDB的事务系统申请的，根据申请顺序严格递增的</p>
+<p>同时每行数据都是有多个版本的，每次事务更新的时候，都会生成一个新的数据版本，并把transaction id复制给这个数据版本的事务ID，记为 row trx_id。同时也会保存旧的数据版本</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/Update%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%20MVCC%E5%A4%9A%E7%89%88%E6%9C%AC.png"
+                      alt="Update语句执行流程 MVCC多版本"
+                ></p>
+<p>U1,U2,U3就是对应的undo log，而V1,V2,V3并不是真是存在的。是根据当前版本和undo log计算出来的</p>
+<p>同时，在查询数据的时候，就会以当前事务启动时的版本号为准，对记录进行查找，一直找到当前事务之前的版本号的数据为准</p>
+<p>undolog何时删除？在系统中没有比这个回滚日志更早的read-view时，就会删除undolog</p>
+<hr>
+<p align="right">**2023/10/10更新**</p>
+
+
+
+<h1 id="MySQL运行过程中Crash的该如何恢复"><a href="#MySQL运行过程中Crash的该如何恢复" class="headerlink" title="MySQL运行过程中Crash的该如何恢复"></a>MySQL运行过程中Crash的该如何恢复</h1><p>redo log里记录了数据页的修改以及change buffer新写入的信息<br>如果掉电,持久化的change buffer数据已经purge,不用恢复。主要分析没有持久化的数据<br>情况又分为以下几种:<br>(1)change buffer写入,redo log虽然做了fsync但未commit,binlog未fsync到磁盘,这部分数据丢失<br>(2)change buffer写入,redo log写入但没有commit,binlog以及fsync到磁盘,先从binlog恢复redo log,再从redo log恢复change buffer<br>(3)change buffer写入,redo log和binlog都已经fsync.那么直接从redo log里恢复。</p>
+<h1 id="关于ChangeBuffer对更新时候的帮助"><a href="#关于ChangeBuffer对更新时候的帮助" class="headerlink" title="关于ChangeBuffer对更新时候的帮助"></a>关于ChangeBuffer对更新时候的帮助</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- a为普通索引,b为普通索引</span></span><br><span class="line">update table_a <span class="keyword">set</span> a <span class="operator">=</span> <span class="number">1</span> <span class="keyword">where</span> b <span class="operator">=</span> <span class="number">2</span> <span class="keyword">and</span> version <span class="operator">=</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>首先先明确下ChangeBuffer的作用<br>当需要更新一个数据页时，如果数据页在内存中就直接更新，而如果这个数据页还没有在内存中的话，在不影响数据一致性的前提下，InnoDB 会将这些更新操作缓存在 change buffer 中，这样就不需要从磁盘中读入这个数据页了。在下次查询需要访问这个数据页的时候，将数据页读入内存，然后执行 change buffer 中与这个页有关的操作。<br>由上面的这句话我们可以得出两个结论</p>
+<ul>
+<li>ChangeBuffer适用的场景: 非唯一索引变更</li>
+<li>ChangeBuffer的优点: 减少对索引页的随机读, 提高修改数据的效率</li>
+</ul>
+<p>那么我们结合前面的执行流程图和ChangeBuffer，分析下刚刚上面的那个sql, 它在执行的时候分别做了哪些事情?</p>
+<ul>
+<li>查找索引b, 获取对应的主键id列表</li>
+<li>回表, 加载对应数据所在的数据页到内存中</li>
+<li>修改内存中的数据</li>
+<li>对索引a的修改，记录到change buffer中</li>
+<li>redo log prepare状态</li>
+<li>binlog</li>
+<li>redo log commit状态</li>
+<li>返回成功</li>
+</ul>
+<h2 id="关于binlog是否完整如何判断"><a href="#关于binlog是否完整如何判断" class="headerlink" title="关于binlog是否完整如何判断"></a>关于binlog是否完整如何判断</h2><ul>
+<li>statement 格式的 binlog，最后会有 COMMIT；</li>
+<li>row 格式的 binlog，最后会有一个 XID event。</li>
+</ul>
+<h2 id="为什么prepare阶段的redo-log加上完整的binlog事务就可以提交"><a href="#为什么prepare阶段的redo-log加上完整的binlog事务就可以提交" class="headerlink" title="为什么prepare阶段的redo log加上完整的binlog事务就可以提交"></a>为什么prepare阶段的redo log加上完整的binlog事务就可以提交</h2><p>加入binlog写完之后，MySQL发生崩溃，此时binlog已经写入，后面从库包括我们恢复这个奔溃的MySQL都会使用到这个binlog，所以此时奔溃的主库也要提交事务</p>
+<h2 id="关于写-redolog"><a href="#关于写-redolog" class="headerlink" title="关于写 redolog"></a>关于写 redolog</h2><p>此时MySQL会用到redolog buffer。在插入数据的过程中，生成的日志会先写入到redolog buffer中，等待commit语句执行时redolog buffer才会刷盘</p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"26b8e6758f16d4524e69","clientSecret":"ecfd9e9a439bcb8a4c4fd21f4677fa102c68b352","repo":"beastmouth.github.io","owner":"beastmouth","admin":["beastmouth"],"distractionFreeMode":false,"createIssueManually":true};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：Update语句执行流程</li>
+        <li>Post author：大黄</li>
+        <li>Create time：2021-12-26 13:47:21</li>
+        <li>
+            Post link：https://huangbangjing.cn/2021/12/26/Update语句执行流程/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2021/12/30/Redis%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E8%AE%BE%E8%AE%A1/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Redis缓存一致性设计</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2021/12/08/%E5%86%99%E4%B8%80%E7%AF%87RocketMQ%E5%8D%B7%E6%96%87%E8%AE%A9%E8%87%AA%E5%B7%B1%E5%86%B7%E9%9D%99%E4%B8%80%E4%B8%8B/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">写一篇RocketMQ卷文让自己冷静一下</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2023&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">大黄</a>
+        </div>
+        
+            <script async  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+            <div class="icp-info info-item"><a target="_blank" rel="nofollow" href="https://beian.miit.gov.cn">浙ICP备2021039538号-1</a></div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%E6%80%9D%E6%83%B3"><span class="nav-text">两阶段提交思想</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%B7%E8%84%8F%E9%A1%B5"><span class="nav-text">刷脏页</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A6%96%E5%85%88%E5%85%88%E4%BB%8B%E7%BB%8D%E4%B8%8B%E4%BB%80%E4%B9%88%E6%98%AF%E8%84%8F%E9%A1%B5"><span class="nav-text">首先先介绍下什么是脏页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%B7%E8%84%8F%E9%A1%B5%E7%9A%84%E5%87%A0%E7%A7%8D%E6%83%85%E5%86%B5"><span class="nav-text">刷脏页的几种情况</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MVCC%EF%BC%88MySQL%E9%9A%94%E7%A6%BB%E6%80%A7%E7%9A%84%E4%BF%9D%E8%AF%81%EF%BC%89"><span class="nav-text">MVCC（MySQL隔离性的保证）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%89%88%E6%9C%AC%E5%92%8Crow-trx-id"><span class="nav-text">多版本和row trx_id</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B%E4%B8%ADCrash%E7%9A%84%E8%AF%A5%E5%A6%82%E4%BD%95%E6%81%A2%E5%A4%8D"><span class="nav-text">MySQL运行过程中Crash的该如何恢复</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B3%E4%BA%8EChangeBuffer%E5%AF%B9%E6%9B%B4%E6%96%B0%E6%97%B6%E5%80%99%E7%9A%84%E5%B8%AE%E5%8A%A9"><span class="nav-text">关于ChangeBuffer对更新时候的帮助</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Ebinlog%E6%98%AF%E5%90%A6%E5%AE%8C%E6%95%B4%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD"><span class="nav-text">关于binlog是否完整如何判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88prepare%E9%98%B6%E6%AE%B5%E7%9A%84redo-log%E5%8A%A0%E4%B8%8A%E5%AE%8C%E6%95%B4%E7%9A%84binlog%E4%BA%8B%E5%8A%A1%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%8F%90%E4%BA%A4"><span class="nav-text">为什么prepare阶段的redo log加上完整的binlog事务就可以提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%86%99-redolog"><span class="nav-text">关于写 redolog</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","hOffset":-20,"vOffset":-80,"width":200,"height":400},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

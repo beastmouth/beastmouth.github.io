@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="大黄">
+    
+    <title>
+        
+            MySQL锁事 |
+        
+        DH大黄
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"huangbangjing.cn","root":"/","language":"en","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"stay gold","backgound_img":"/images/bg.svg"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                DH大黄
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                CATEGORIES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/links"
+                            >
+                                LINKS
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">CATEGORIES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/links">LINKS</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">MySQL锁事</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">大黄</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-07-30 13:38:26</span>
+        <span class="mobile">2022-07-30 13:38</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/MySQL/">MySQL</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>3.3k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>14 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="SQL四种语言"><a href="#SQL四种语言" class="headerlink" title="SQL四种语言"></a>SQL四种语言</h1><p>先介绍下SQL的四种语言</p>
+<ul>
+<li>DDL：数据库定义语言 定义数据库结构，用于定义数据库的三级结构，包括外模式、概念模式、内模式及其相互之间的映像，定义数据的完整性、安全控制等约束。DDL不需要commit<ul>
+<li>相关语句：CREATE，ALTER，DROP，TRUNCATE，COMMENT，RENAME</li>
+</ul>
+</li>
+<li>DML：数据操控语言，由DBMS提供，用于让用户或程序员使用，实现对数据库中数据的操作。<ul>
+<li>相关语句：SELECT，INSERT，UPDATE，DELETE，MERGE，CALL，EXPLAIN PLAN，LOCK TABLE</li>
+</ul>
+</li>
+<li>DCL：数据库控制语言，用于授权， 角色控制等<ul>
+<li>相关语句：GRANT，REVOKE</li>
+</ul>
+</li>
+<li>TCL：事务控制语言<ul>
+<li>相关语句：SAVEPOINT，ROLLBACK，SET TRANSACTION</li>
+</ul>
+</li>
+</ul>
+<h1 id="锁的粒度"><a href="#锁的粒度" class="headerlink" title="锁的粒度"></a>锁的粒度</h1><h2 id="全局锁"><a href="#全局锁" class="headerlink" title="全局锁"></a>全局锁</h2><p>顾名思义就是对整个数据库实例加锁，MySQL提供了一个全局读锁（命令：Flush tables with read lock）FTWRL。让整个数据库处于只读状态<br>效果：阻塞数据更新语句（数据的增删改），数据定义语句（创建/修改表结构），更新类事务的提交语句<br>使用场景：做全库备份（整个库每个表都select出来存成文本）<br>全库备份：当表的引擎支持一致性读（例如Innodb）就可以开启一个事务，来一致性读，做全表备份<br>风险：整个库陷入只读</p>
+<h2 id="表级锁"><a href="#表级锁" class="headerlink" title="表级锁"></a>表级锁</h2><p>MySQL表级锁有两种</p>
+<ul>
+<li>表锁（数据库引擎不支持行锁时使用）</li>
+<li>元数据锁（MDL）</li>
+</ul>
+<p>表锁：lock tables … read/write 释放锁的方法 unlock tables/客户端断开时自动释放<br>不仅限制其他线程操作，对当前线程的操作也会有影响（例如read也会影响当前线程对表的update）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span>;</span><br><span class="line">lock tables t read;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="comment">-- 在释放表锁之前，当前线程的更新操作会报错</span></span><br><span class="line"><span class="comment">-- 报 Table &#x27;t&#x27; was locked with a READ lock and can&#x27;t be updated</span></span><br><span class="line">update t <span class="keyword">set</span> a <span class="operator">=</span> <span class="number">2</span> <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">unlock tables;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 而另一个线程的更新语句会被阻塞住（不报错）</span></span><br><span class="line">update t <span class="keyword">set</span> a <span class="operator">=</span> <span class="number">1</span> <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>MDL锁。不需要显示声明，在访问表时会自动加上。作用是保证读写的正确性，不允许有线程访问表的时候，其他线程对表有结构变更<br>在MySQL5.5中引入，当对一个表进行增删改查操纵时，上MDL读锁，对表结构进行变更的时候，上MDL写锁<br>读锁不互斥，读写/写写互斥<br>关于读写锁引发的一个问题（查询语句频繁导致数据库线程被耗尽）<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20demo.png"
+                      alt="MySQL锁事 demo.png"
+                ><br>为什么sessionc的写锁在没有获取到锁的时候，也会阻塞sessiond的读锁 <a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/q2878948/article/details/96430129" >参考链接<i class="fas fa-external-link-alt"></i></a><br>结论：申请MDL锁的操作会形成一个队列，队列中写锁获取优先级高于读锁。一旦出现写锁等待，不但当前操作会被阻塞，同时还会阻塞后续该表的所有操作。事务一旦申请到MDL锁后，直到事务执行完才会将锁释放。<br>既然锁表风险那么大，但是不锁表又不能搞定操作期间dml（数据库操作语句）语句的影响，那么有什么办法呢？<br>online ddl解决更新表期间导致dml阻塞的问题<br><strong>online ddl （</strong>1、2、4、5如果没有锁冲突，执行时间非常短。第3步占用了DDL绝大部分时间，这期间这个表可以正常读写数据，是因此称为“online ” 上面的例子在第一步就锁住了 <strong>)</strong></p>
+<ol>
+<li>拿MDL写锁</li>
+<li>降级成MDL读锁</li>
+<li>真正做DDL</li>
+<li>升级成MDL写锁</li>
+<li>释放MDL锁<br>或者ddl时，设置超时时间，当到了指定时间自动放弃，稍后重试<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- MariaDB整合了AliSQL的整个功能</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> tbl_name NOWAIT <span class="keyword">add</span> <span class="keyword">column</span> ...</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> tbl_name WAIT N <span class="keyword">add</span> <span class="keyword">column</span> ...</span><br></pre></td></tr></table></figure>
+<a class="link"   target="_blank" rel="noopener" href="https://blog.csdn.net/q2878948/article/details/96430129" >
+<i class="fas fa-external-link-alt"></i></a><h2 id="行锁（存储引擎实现）"><a href="#行锁（存储引擎实现）" class="headerlink" title="行锁（存储引擎实现）"></a>行锁（存储引擎实现）</h2>此处讲 Innodb 的行锁<br>行锁两阶段协议：<strong>Innodb事务中，行锁在需要时才加上，等待事务结束时才释放</strong><h2 id="间隙锁（GapLock-防止幻读）"><a href="#间隙锁（GapLock-防止幻读）" class="headerlink" title="间隙锁（GapLock 防止幻读）"></a>间隙锁（GapLock 防止幻读）</h2>在可重复读隔离级别下生效</li>
+</ol>
+<p><strong>跟间隙锁存在冲突关系的，是“往这个间隙中插入一个记录”这个操作</strong>。间隙锁之间都不存在冲突关系<br>间隙锁+行锁合称为next-key lock 前开后闭的区间</p>
+<h3 id="加锁的规则"><a href="#加锁的规则" class="headerlink" title="加锁的规则"></a>加锁的规则</h3><ul>
+<li>原则 1：加锁的基本单位是 next-key lock。next-key lock 是前开后闭区间</li>
+<li>原则2：查找过程中访问到的对象才会加锁</li>
+<li>优化 1：索引上的等值查询，给唯一索引加锁的时候，next-key lock 退化为行锁。</li>
+<li>优化 2：索引上的等值查询，向右遍历时且最后一个值不满足等值条件的时候，next-key lock 退化为间隙锁。</li>
+<li>一个 bug：唯一索引上的范围查询会访问到不满足条件的第一个值为止。</li>
+</ul>
+<h3 id="日常使用的注意点"><a href="#日常使用的注意点" class="headerlink" title="日常使用的注意点"></a>日常使用的注意点</h3><p>select … lock in share mode; 要考虑到覆盖索引的情况，不回表，就不会对聚簇索引上间隙锁<br>select … for update; 系统会认为接下来会更新数据，就会顺便把聚簇索引也给锁上</p>
+<h2 id="死锁与死锁检测"><a href="#死锁与死锁检测" class="headerlink" title="死锁与死锁检测"></a>死锁与死锁检测</h2><p>事务之间互相等待对方持有的锁，导致发生死锁。出现死锁两个解决的策略</p>
+<ul>
+<li>直接进入超时等待，直到超时。可以通过参数 innodb_lock_wait_time 来设置（默认50s）</li>
+<li>发起死锁检测，主动回滚死锁链条中的某一个事务，让其他事务得以继续执行。 通过参数 innodb_deadlock_detect 为 on 来表示开启这个逻辑（将持有最少行级排他锁的事务进行回滚。</li>
+</ul>
+<p>第一个策略，太长业务不接受，太短容易把正常等待锁的操作误伤。通常还是要使用第二种策略（默认也是开启的）<br>但是死锁检测需要耗费大量CPU资源。每个并发线程都要判断一下会不会因为自己的加入而导致死锁（现象：CPU利用率高，但是执行不了几个事务）</p>
+<h1 id="一些名词"><a href="#一些名词" class="headerlink" title="一些名词"></a>一些名词</h1><p>S锁：S 锁，英文为 Shared Lock，中文译作共享锁，有时候我们也称之为读锁，即 Read Lock。<br>X锁：X 锁，英文为 Exclusive Lock，中文译作排他锁，有时候我们也称之为写锁，即 Write Lock。如同它的名字，X 锁是具有排他性的，即一个写锁会阻塞其他的 X 锁和 S 锁。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 排他锁</span></span><br><span class="line"><span class="keyword">select</span> ... <span class="keyword">for</span> update;</span><br><span class="line"><span class="comment">-- 共享锁</span></span><br><span class="line"><span class="keyword">select</span> ... lock <span class="keyword">in</span> share mode;</span><br></pre></td></tr></table></figure>
+<p>意向锁 I锁：在申请对应行锁之前，需要在表上申请表级意向锁。如果有了意向锁，只需要判断该意向锁与即将添加的表级锁是否兼容即可。因为意向锁的存在代表了，有行级锁的存在或者即将有行级锁的存在。因而无需遍历整个表，即可获取结果</p>
+<ul>
+<li><strong>IX，IS是表级锁，不会和行级的X，S锁发生冲突。只会和表级的X，S发生冲突</strong></li>
+<li>行级别的X和S按照普通的共享、排他规则即可。所以之前的示例中第2步不会冲突，只要写操作不是同一行，就不会发生冲突。</li>
+</ul>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20%E6%84%8F%E5%90%91%E9%94%81%E7%9B%B8%E5%85%B3.png"
+                      alt="MySQL锁事 意向锁相关.png"
+                ><br>实际上表级的意向锁，做的目的是为了让我们的dml语句执行期间，不让ddl语句来影响表的结构，也不让用户手动声明的表级锁产生影响</p>
+<hr>
+<h1 id="一些操作"><a href="#一些操作" class="headerlink" title="一些操作"></a>一些操作</h1><h2 id="查看当前session持有锁的情况"><a href="#查看当前session持有锁的情况" class="headerlink" title="查看当前session持有锁的情况"></a>查看当前session持有锁的情况</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 8.0.13版本 performance_schema.data_locks</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> data_locks;</span><br></pre></td></tr></table></figure>
+<p>执行效果<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8Dsession%E6%98%AF%E5%90%A6%E6%8C%81%E6%9C%89%E9%94%81.png"
+                      alt="MySQL锁事 查看当前session是否持有锁.png"
+                ></p>
+<h2 id="关于上锁"><a href="#关于上锁" class="headerlink" title="关于上锁"></a>关于上锁</h2><h2 id="插入一条记录（多条实际上也是逐条插入操作）"><a href="#插入一条记录（多条实际上也是逐条插入操作）" class="headerlink" title="插入一条记录（多条实际上也是逐条插入操作）"></a>插入一条记录（多条实际上也是逐条插入操作）</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- </span></span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_insert(id,`name`) <span class="keyword">VALUES</span> (<span class="number">8</span>,<span class="string">&#x27;a&#x27;</span>),(<span class="number">9</span>,<span class="string">&#x27;a&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>此时只上了一个表级的意向排他锁<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20%E6%8F%92%E5%85%A5%E4%B8%80%E6%9D%A1%E8%AE%B0%E5%BD%95.png"
+                      alt="MySQL锁事 插入一条记录.png"
+                ></p>
+<h2 id="在上面插入记录的前提下，在插入相同id的记录"><a href="#在上面插入记录的前提下，在插入相同id的记录" class="headerlink" title="在上面插入记录的前提下，在插入相同id的记录"></a>在上面插入记录的前提下，在插入相同id的记录</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- session1 先执行</span></span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_insert(id,`name`) <span class="keyword">VALUES</span> (<span class="number">8</span>,<span class="string">&#x27;a&#x27;</span>),(<span class="number">9</span>,<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line"><span class="comment">-- session2 后执行</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_insert(id,`name`) <span class="keyword">VALUES</span> (<span class="number">8</span>,<span class="string">&#x27;a&#x27;</span>),(<span class="number">9</span>,<span class="string">&#x27;a&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20%E6%8F%92%E5%85%A5%E7%9B%B8%E5%90%8C%E7%9A%84id.png"
+                      alt="MySQL锁事 插入相同的id.png"
+                ><br>会先给session1对应id=8的记录上排他锁，行锁。然后session2等待锁</p>
+<h2 id="查询语句-for-update"><a href="#查询语句-for-update" class="headerlink" title="查询语句 for update"></a>查询语句 for update</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test_insert <span class="keyword">where</span> id <span class="keyword">in</span> (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>) <span class="keyword">for</span> update;</span><br></pre></td></tr></table></figure>
+<p>给表上意向排他锁，给行上排他锁与行锁<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20selectforupdate.png"
+                      alt="MySQL锁事 selectforupdate.png"
+                ></p>
+<h2 id="查询语句-lock-in-share-mode"><a href="#查询语句-lock-in-share-mode" class="headerlink" title="查询语句 lock in share mode"></a>查询语句 lock in share mode</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> test_insert <span class="keyword">where</span> id <span class="keyword">in</span> (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>) lock <span class="keyword">in</span> share mode;</span><br></pre></td></tr></table></figure>
+<p>给表上意向共享锁，给行上共享锁与行锁<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20selectlockinsharemode.png"
+                      alt="MySQL锁事 selectlockinsharemode.png"
+                ></p>
+<h2 id="删除一个不存在的行"><a href="#删除一个不存在的行" class="headerlink" title="删除一个不存在的行"></a>删除一个不存在的行</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> test_insert <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">110</span>;</span><br></pre></td></tr></table></figure>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20%E5%88%A0%E9%99%A4%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E6%95%B0%E6%8D%AE.png"
+                      alt="MySQL锁事 删除不存在的数据.png"
+                ><br>对表上了意向排他锁，然后对数据库最大的记录后上了间隙锁（supremum pseudo-record 相当于比数据库中所有的记录都大）<br>此时假如又有记录在插入，比最大的id大。则会阻塞<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20%E5%88%A0%E9%99%A4%E4%B8%80%E4%B8%AA%E4%B8%8D%E5%AD%98%E5%9C%A8%E8%A1%8C%E6%97%B6%E6%8F%92%E5%85%A5%E4%B8%80%E6%9D%A1%E6%AF%94%E6%9C%80%E5%A4%A7id%E8%BF%98%E5%A4%A7%E7%9A%84%E6%95%B0%E6%8D%AE.png"
+                      alt="MySQL锁事 删除一个不存在行时插入一条比最大id还大的数据.png"
+                ></p>
+<h2 id="删除一个存在的行"><a href="#删除一个存在的行" class="headerlink" title="删除一个存在的行"></a>删除一个存在的行</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20%E5%88%A0%E9%99%A4%E5%AD%98%E5%9C%A8%E7%9A%84%E6%95%B0%E6%8D%AE.png"
+                      alt="MySQL锁事 删除存在的数据.png"
+                ><br>表意向排他锁，行排他锁，行锁</p>
+<hr>
+<h1 id="一些锁上遇到的问题"><a href="#一些锁上遇到的问题" class="headerlink" title="一些锁上遇到的问题"></a>一些锁上遇到的问题</h1><h2 id="并发insert导致死锁的问题"><a href="#并发insert导致死锁的问题" class="headerlink" title="并发insert导致死锁的问题"></a>并发insert导致死锁的问题</h2><p>问题执行的sql：<br>先执行session1的begin与insert语句（第一环节），此时session2，session3执行插入语句（第二环节），session1回滚（第三环节）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- session1</span></span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_insert(id,`name`) <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line"><span class="keyword">rollback</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- session2</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_insert(id,`name`) <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- session3</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_insert(id,`name`) <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="string">&#x27;a&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>第一环节：对表上意向排他锁<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20%E9%97%AE%E9%A2%98%E5%9B%BE%E7%89%871-1.png"
+                      alt="MySQL锁事 问题图片1-1.png"
+                ><br>第二环节：<br>session1对表上意向排他锁（第一环节就已经完成），因为有锁竞争，还会对id=1的记录上排他锁和行锁<br>session2/session3对表上意向排他锁，对id=1的记录获取共享锁和行锁（获取不到共享锁和行锁，阻塞）<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20%E9%97%AE%E9%A2%98%E5%9B%BE%E7%89%871-2.png"
+                      alt="MySQL锁事 问题图片1-2.png"
+                ><br>第三环节：<br>session1回滚，释放排他锁与行锁<br>session2/session3一个执行成功，另一个报死锁错误<br>查看死锁日志</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> engine innodb status;</span><br></pre></td></tr></table></figure>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/MySQL/MySQL%E9%94%81%E4%BA%8B%20%E9%97%AE%E9%A2%98%E5%9B%BE%E7%89%871-3.png"
+                      alt="MySQL锁事 问题图片1-3.png"
+                ><br>两个session都持有S锁，都想拿X锁，第一个session想拿X锁，发现第二个session持有S锁，等待…第二个也同理，于是就发生了死锁（升级成排他时发现有其他线程持有共享，等待。然后相互等待导致死锁)<br>mysql检测死锁，会回滚其中一个事务</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">------------------------</span></span><br><span class="line">LATEST DETECTED DEADLOCK</span><br><span class="line"><span class="comment">------------------------</span></span><br><span class="line"><span class="number">2022</span><span class="number">-07</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">55</span>:<span class="number">02</span> <span class="number">140021836547840</span></span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> (<span class="number">1</span>) TRANSACTION:</span><br><span class="line">TRANSACTION <span class="number">1064326</span>, ACTIVE <span class="number">7</span> sec inserting</span><br><span class="line">mysql tables <span class="keyword">in</span> use <span class="number">1</span>, locked <span class="number">1</span></span><br><span class="line">LOCK WAIT <span class="number">4</span> lock struct(s), heap size <span class="number">1128</span>, <span class="number">2</span> <span class="type">row</span> lock(s)</span><br><span class="line">MySQL thread id <span class="number">11</span>, OS thread handle <span class="number">140022177969920</span>, query id <span class="number">1069</span> <span class="number">172.18</span><span class="number">.0</span><span class="number">.1</span> root update</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_insert(id,`name`) <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="string">&#x27;a&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> (<span class="number">1</span>) HOLDS THE LOCK(S):</span><br><span class="line">RECORD LOCKS space id <span class="number">6</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">80</span> index <span class="keyword">PRIMARY</span> <span class="keyword">of</span> <span class="keyword">table</span> `test`.`test_insert` trx id <span class="number">1064326</span> lock mode S locks gap before rec</span><br><span class="line">Record lock, heap <span class="keyword">no</span> <span class="number">12</span> PHYSICAL RECORD: n_fields <span class="number">4</span>; compact format; info bits <span class="number">0</span></span><br><span class="line"> <span class="number">0</span>: len <span class="number">4</span>; hex <span class="number">80000002</span>; <span class="keyword">asc</span>     ;;</span><br><span class="line"> <span class="number">1</span>: len <span class="number">6</span>; hex <span class="number">000000103</span>b36; <span class="keyword">asc</span>     ;<span class="number">6</span>;;</span><br><span class="line"> <span class="number">2</span>: len <span class="number">7</span>; hex <span class="number">82000000870110</span>; <span class="keyword">asc</span>        ;;</span><br><span class="line"> <span class="number">3</span>: <span class="keyword">SQL</span> <span class="keyword">NULL</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> (<span class="number">1</span>) WAITING <span class="keyword">FOR</span> THIS LOCK <span class="keyword">TO</span> BE GRANTED:</span><br><span class="line">RECORD LOCKS space id <span class="number">6</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">80</span> index <span class="keyword">PRIMARY</span> <span class="keyword">of</span> <span class="keyword">table</span> `test`.`test_insert` trx id <span class="number">1064326</span> lock_mode X locks gap before rec <span class="keyword">insert</span> intention waiting</span><br><span class="line">Record lock, heap <span class="keyword">no</span> <span class="number">12</span> PHYSICAL RECORD: n_fields <span class="number">4</span>; compact format; info bits <span class="number">0</span></span><br><span class="line"> <span class="number">0</span>: len <span class="number">4</span>; hex <span class="number">80000002</span>; <span class="keyword">asc</span>     ;;</span><br><span class="line"> <span class="number">1</span>: len <span class="number">6</span>; hex <span class="number">000000103</span>b36; <span class="keyword">asc</span>     ;<span class="number">6</span>;;</span><br><span class="line"> <span class="number">2</span>: len <span class="number">7</span>; hex <span class="number">82000000870110</span>; <span class="keyword">asc</span>        ;;</span><br><span class="line"> <span class="number">3</span>: <span class="keyword">SQL</span> <span class="keyword">NULL</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> (<span class="number">2</span>) TRANSACTION:</span><br><span class="line">TRANSACTION <span class="number">1064327</span>, ACTIVE <span class="number">4</span> sec inserting</span><br><span class="line">mysql tables <span class="keyword">in</span> use <span class="number">1</span>, locked <span class="number">1</span></span><br><span class="line">LOCK WAIT <span class="number">4</span> lock struct(s), heap size <span class="number">1128</span>, <span class="number">2</span> <span class="type">row</span> lock(s)</span><br><span class="line">MySQL thread id <span class="number">13</span>, OS thread handle <span class="number">140022180951808</span>, query id <span class="number">1073</span> <span class="number">172.18</span><span class="number">.0</span><span class="number">.1</span> root update</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> test_insert(id,`name`) <span class="keyword">VALUES</span> (<span class="number">1</span>,<span class="string">&#x27;a&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> (<span class="number">2</span>) HOLDS THE LOCK(S):</span><br><span class="line">RECORD LOCKS space id <span class="number">6</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">80</span> index <span class="keyword">PRIMARY</span> <span class="keyword">of</span> <span class="keyword">table</span> `test`.`test_insert` trx id <span class="number">1064327</span> lock mode S locks gap before rec</span><br><span class="line">Record lock, heap <span class="keyword">no</span> <span class="number">12</span> PHYSICAL RECORD: n_fields <span class="number">4</span>; compact format; info bits <span class="number">0</span></span><br><span class="line"> <span class="number">0</span>: len <span class="number">4</span>; hex <span class="number">80000002</span>; <span class="keyword">asc</span>     ;;</span><br><span class="line"> <span class="number">1</span>: len <span class="number">6</span>; hex <span class="number">000000103</span>b36; <span class="keyword">asc</span>     ;<span class="number">6</span>;;</span><br><span class="line"> <span class="number">2</span>: len <span class="number">7</span>; hex <span class="number">82000000870110</span>; <span class="keyword">asc</span>        ;;</span><br><span class="line"> <span class="number">3</span>: <span class="keyword">SQL</span> <span class="keyword">NULL</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> (<span class="number">2</span>) WAITING <span class="keyword">FOR</span> THIS LOCK <span class="keyword">TO</span> BE GRANTED:</span><br><span class="line">RECORD LOCKS space id <span class="number">6</span> page <span class="keyword">no</span> <span class="number">4</span> n bits <span class="number">80</span> index <span class="keyword">PRIMARY</span> <span class="keyword">of</span> <span class="keyword">table</span> `test`.`test_insert` trx id <span class="number">1064327</span> lock_mode X locks gap before rec <span class="keyword">insert</span> intention waiting</span><br><span class="line">Record lock, heap <span class="keyword">no</span> <span class="number">12</span> PHYSICAL RECORD: n_fields <span class="number">4</span>; compact format; info bits <span class="number">0</span></span><br><span class="line"> <span class="number">0</span>: len <span class="number">4</span>; hex <span class="number">80000002</span>; <span class="keyword">asc</span>     ;;</span><br><span class="line"> <span class="number">1</span>: len <span class="number">6</span>; hex <span class="number">000000103</span>b36; <span class="keyword">asc</span>     ;<span class="number">6</span>;;</span><br><span class="line"> <span class="number">2</span>: len <span class="number">7</span>; hex <span class="number">82000000870110</span>; <span class="keyword">asc</span>        ;;</span><br><span class="line"> <span class="number">3</span>: <span class="keyword">SQL</span> <span class="keyword">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> WE ROLL BACK TRANSACTION (<span class="number">2</span>)</span><br><span class="line"><span class="comment">------------</span></span><br><span class="line">TRANSACTIONS</span><br><span class="line"><span class="comment">------------</span></span><br><span class="line">Trx id counter <span class="number">1064328</span></span><br><span class="line">Purge done <span class="keyword">for</span> trx<span class="string">&#x27;s n:o &lt; 1064325 undo n:o &lt; 0 state: running but idle</span></span><br><span class="line"><span class="string">History list length 3</span></span><br><span class="line"><span class="string">LIST OF TRANSACTIONS FOR EACH SESSION:</span></span><br><span class="line"><span class="string">---TRANSACTION 421497208045512, not started</span></span><br><span class="line"><span class="string">0 lock struct(s), heap size 1128, 0 row lock(s)</span></span><br><span class="line"><span class="string">---TRANSACTION 421497208044704, not started</span></span><br><span class="line"><span class="string">0 lock struct(s), heap size 1128, 0 row lock(s)</span></span><br><span class="line"><span class="string">---TRANSACTION 421497208040664, not started</span></span><br><span class="line"><span class="string">0 lock struct(s), heap size 1128, 0 row lock(s)</span></span><br><span class="line"><span class="string">---TRANSACTION 421497208043896, not started</span></span><br><span class="line"><span class="string">0 lock struct(s), heap size 1128, 0 row lock(s)</span></span><br><span class="line"><span class="string">---TRANSACTION 421497208043088, not started</span></span><br><span class="line"><span class="string">0 lock struct(s), heap size 1128, 0 row lock(s)</span></span><br><span class="line"><span class="string">---TRANSACTION 421497208042280, not started</span></span><br><span class="line"><span class="string">0 lock struct(s), heap size 1128, 0 row lock(s)</span></span><br><span class="line"><span class="string">---TRANSACTION 421497208041472, not started</span></span><br><span class="line"><span class="string">0 lock struct(s), heap size 1128, 0 row lock(s)</span></span><br><span class="line"><span class="string">---TRANSACTION 421497208039856, not started</span></span><br><span class="line"><span class="string">0 lock struct(s), heap size 1128, 0 row lock(s)</span></span><br><span class="line"><span class="string">---TRANSACTION 421497208039048, not started</span></span><br><span class="line"><span class="string">0 lock struct(s), heap size 1128, 0 row lock(s)</span></span><br><span class="line"><span class="string">--------</span></span><br><span class="line"><span class="string">FILE I/O</span></span><br><span class="line"><span class="string">--------</span></span><br><span class="line"><span class="string">I/O thread 0 state: waiting for completed aio requests (insert buffer thread)</span></span><br><span class="line"><span class="string">I/O thread 1 state: waiting for completed aio requests (log thread)</span></span><br><span class="line"><span class="string">I/O thread 2 state: waiting for completed aio requests (read thread)</span></span><br><span class="line"><span class="string">I/O thread 3 state: waiting for completed aio requests (read thread)</span></span><br><span class="line"><span class="string">I/O thread 4 state: waiting for completed aio requests (read thread)</span></span><br><span class="line"><span class="string">I/O thread 5 state: waiting for completed aio requests (read thread)</span></span><br><span class="line"><span class="string">I/O thread 6 state: waiting for completed aio requests (write thread)</span></span><br><span class="line"><span class="string">I/O thread 7 state: waiting for completed aio requests (write thread)</span></span><br><span class="line"><span class="string">I/O thread 8 state: waiting for completed aio requests (write thread)</span></span><br><span class="line"><span class="string">I/O thread 9 state: waiting for completed aio requests (write thread)</span></span><br><span class="line"><span class="string">Pending normal aio reads: [0, 0, 0, 0] , aio writes: [0, 0, 0, 0] ,</span></span><br><span class="line"><span class="string"> ibuf aio reads:, log i/o&#x27;</span>s:, sync i<span class="operator">/</span>o<span class="string">&#x27;s:</span></span><br><span class="line"><span class="string">Pending flushes (fsync) log: 0; buffer pool: 0</span></span><br><span class="line"><span class="string">998 OS file reads, 1042 OS file writes, 750 OS fsyncs</span></span><br><span class="line"><span class="string">0.00 reads/s, 0 avg bytes/read, 0.83 writes/s, 0.77 fsyncs/s</span></span><br></pre></td></tr></table></figure>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"26b8e6758f16d4524e69","clientSecret":"ecfd9e9a439bcb8a4c4fd21f4677fa102c68b352","repo":"beastmouth.github.io","owner":"beastmouth","admin":["beastmouth"],"distractionFreeMode":false,"createIssueManually":true};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：MySQL锁事</li>
+        <li>Post author：大黄</li>
+        <li>Create time：2022-07-30 13:38:26</li>
+        <li>
+            Post link：https://huangbangjing.cn/2022/07/30/MySQL锁事/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/08/02/Dubbo%E5%9F%BA%E7%A1%80%E7%AF%87%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Dubbo基础篇服务暴露</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/03/19/%E4%BB%8EReentrantLock%E7%9C%8BAQS/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">从ReentrantLock看AQS</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2023&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">大黄</a>
+        </div>
+        
+            <script async  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+            <div class="icp-info info-item"><a target="_blank" rel="nofollow" href="https://beian.miit.gov.cn">浙ICP备2021039538号-1</a></div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL%E5%9B%9B%E7%A7%8D%E8%AF%AD%E8%A8%80"><span class="nav-text">SQL四种语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%94%81%E7%9A%84%E7%B2%92%E5%BA%A6"><span class="nav-text">锁的粒度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E9%94%81"><span class="nav-text">全局锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E7%BA%A7%E9%94%81"><span class="nav-text">表级锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E9%94%81%EF%BC%88%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%AE%9E%E7%8E%B0%EF%BC%89"><span class="nav-text">行锁（存储引擎实现）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%B4%E9%9A%99%E9%94%81%EF%BC%88GapLock-%E9%98%B2%E6%AD%A2%E5%B9%BB%E8%AF%BB%EF%BC%89"><span class="nav-text">间隙锁（GapLock 防止幻读）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E9%94%81%E7%9A%84%E8%A7%84%E5%88%99"><span class="nav-text">加锁的规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%E7%9A%84%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="nav-text">日常使用的注意点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%BB%E9%94%81%E4%B8%8E%E6%AD%BB%E9%94%81%E6%A3%80%E6%B5%8B"><span class="nav-text">死锁与死锁检测</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%90%8D%E8%AF%8D"><span class="nav-text">一些名词</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%93%8D%E4%BD%9C"><span class="nav-text">一些操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8Dsession%E6%8C%81%E6%9C%89%E9%94%81%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-text">查看当前session持有锁的情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E4%B8%8A%E9%94%81"><span class="nav-text">关于上锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E4%B8%80%E6%9D%A1%E8%AE%B0%E5%BD%95%EF%BC%88%E5%A4%9A%E6%9D%A1%E5%AE%9E%E9%99%85%E4%B8%8A%E4%B9%9F%E6%98%AF%E9%80%90%E6%9D%A1%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C%EF%BC%89"><span class="nav-text">插入一条记录（多条实际上也是逐条插入操作）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E4%B8%8A%E9%9D%A2%E6%8F%92%E5%85%A5%E8%AE%B0%E5%BD%95%E7%9A%84%E5%89%8D%E6%8F%90%E4%B8%8B%EF%BC%8C%E5%9C%A8%E6%8F%92%E5%85%A5%E7%9B%B8%E5%90%8Cid%E7%9A%84%E8%AE%B0%E5%BD%95"><span class="nav-text">在上面插入记录的前提下，在插入相同id的记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5-for-update"><span class="nav-text">查询语句 for update</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5-lock-in-share-mode"><span class="nav-text">查询语句 lock in share mode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E4%B8%80%E4%B8%AA%E4%B8%8D%E5%AD%98%E5%9C%A8%E7%9A%84%E8%A1%8C"><span class="nav-text">删除一个不存在的行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E4%B8%80%E4%B8%AA%E5%AD%98%E5%9C%A8%E7%9A%84%E8%A1%8C"><span class="nav-text">删除一个存在的行</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E9%94%81%E4%B8%8A%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">一些锁上遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91insert%E5%AF%BC%E8%87%B4%E6%AD%BB%E9%94%81%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">并发insert导致死锁的问题</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","hOffset":-20,"vOffset":-80,"width":200,"height":400},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

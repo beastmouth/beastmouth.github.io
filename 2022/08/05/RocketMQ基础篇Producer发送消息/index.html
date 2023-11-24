@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="大黄">
+    
+    <title>
+        
+            RocketMQ基础篇Producer发送消息 |
+        
+        DH大黄
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"huangbangjing.cn","root":"/","language":"en","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"stay gold","backgound_img":"/images/bg.svg"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                DH大黄
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                CATEGORIES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/links"
+                            >
+                                LINKS
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">CATEGORIES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/links">LINKS</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">RocketMQ基础篇Producer发送消息</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">大黄</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-08-05 10:02:53</span>
+        <span class="mobile">2022-08-05 10:02</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/RocketMQ/">RocketMQ</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>1.9k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>8 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%9F%BA%E7%A1%80%E7%AF%87%20Producer%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%20%E6%B5%81%E7%A8%8B%E5%9B%BE.png"
+                      alt="RocketMQ基础篇 Producer发送消息 流程图.png"
+                ><br>生产者发送消息的主要流程图如上图所示。具体的代码由于比较多，我就不在这边贴出来的。<br>主要讲一下我认为比较重要的点</p>
+<h1 id="消息队列负载均衡"><a href="#消息队列负载均衡" class="headerlink" title="消息队列负载均衡"></a><strong>消息队列负载均衡</strong></h1><p>Producer会每隔30s从Namesrv获取最新的Topic路由信息，并缓存到本地</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.scheduledExecutorService.scheduleAtFixedRate(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 每个30s从NameServer更新路由表信息</span></span><br><span class="line">            MQClientInstance.<span class="keyword">this</span>.updateTopicRouteInfoFromNameServer();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;ScheduledTask updateTopicRouteInfoFromNameServer exception&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;, <span class="number">10</span>, <span class="keyword">this</span>.clientConfig.getPollNameServerInterval(), TimeUnit.MILLISECONDS);</span><br></pre></td></tr></table></figure>
+<p>路由信息就是用来发送时选择具体的Broker和队列的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> SendResult <span class="title">sendSelectImpl</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    Message msg,</span></span></span><br><span class="line"><span class="params"><span class="function">    MessageQueueSelector selector,</span></span></span><br><span class="line"><span class="params"><span class="function">    Object arg,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">final</span> CommunicationMode communicationMode,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">final</span> SendCallback sendCallback, <span class="keyword">final</span> <span class="keyword">long</span> timeout</span></span></span><br><span class="line"><span class="params"><span class="function">    )</span> <span class="keyword">throws</span> MQClientException, RemotingException, MQBrokerException, InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> beginStartTime = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">this</span>.makeSureStateOK();</span><br><span class="line">    Validators.checkMessage(msg, <span class="keyword">this</span>.defaultMQProducer);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 获取Topic队列信息</span></span><br><span class="line">    <span class="comment">// 此处的流程:</span></span><br><span class="line">    <span class="comment">// 先从本地缓存中获取,获取到返回</span></span><br><span class="line">    <span class="comment">// 没有获取到.从NameSrv中获取,获取到返回</span></span><br><span class="line">    <span class="comment">// 没有获取到.如果能够自动创建Topic,会把消息放到TBW102.后续会有自动创建Topic的逻辑</span></span><br><span class="line">    TopicPublishInfo topicPublishInfo = <span class="keyword">this</span>.tryToFindTopicPublishInfo(msg.getTopic());</span><br><span class="line">    <span class="keyword">if</span> (topicPublishInfo != <span class="keyword">null</span> &amp;&amp; topicPublishInfo.ok()) &#123;</span><br><span class="line">        MessageQueue mq = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        List&lt;MessageQueue&gt; messageQueueList =</span><br><span class="line">        mQClientFactory.getMQAdminImpl().parsePublishMessageQueues(topicPublishInfo.getMessageQueueList());</span><br><span class="line">        Message userMessage = MessageAccessor.cloneMessage(msg);</span><br><span class="line">        String userTopic = NamespaceUtil.withoutNamespace(userMessage.getTopic(), mQClientFactory.getClientConfig().getNamespace());</span><br><span class="line">        userMessage.setTopic(userTopic);</span><br><span class="line">    </span><br><span class="line">        mq = mQClientFactory.getClientConfig().queueWithNamespace(selector.select(messageQueueList, userMessage, arg));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> MQClientException(<span class="string">&quot;select message queue threw exception.&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 省略代码....</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 省略代码....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此处流程可以总结为:</p>
+<ul>
+<li><p>尝试获取队列列表</p>
+<ul>
+<li>从本地缓存中获取，获取到返回</li>
+<li>没有获取到。从NameSrv中获取，获取到返回</li>
+<li>没有获取到。获取TBW102的队列，获取到返回。后续会有自动创建Topic的逻辑</li>
+</ul>
+</li>
+<li><p>选择其中一个队列 selector 策略</p>
+<h1 id="关于异步消息"><a href="#关于异步消息" class="headerlink" title="关于异步消息"></a><strong>关于异步消息</strong></h1><p>异步消息需要我们单独加一个回调方法，添加在发送消息成功/失败的一些处理。<br>因为异步消息没有对Broker回来的结果进行额外的处理，那么自然我们就不能像同步消息一样，对Broker返回回来的结果单独针对SendResult进行单独的重试操作。所以需要我们在失败的回调方法上进行额外的处理（例如重试消息发送）<br>具体的原因，我们可以看下消息发送的主干逻辑</p>
+<h1 id="消息发送的主干逻辑"><a href="#消息发送的主干逻辑" class="headerlink" title="消息发送的主干逻辑"></a><strong>消息发送的主干逻辑</strong></h1><p>另外我在这里贴一下消息发送的主干代码（具体的代码和它们的注释可以看下我的github <a class="link"   target="_blank" rel="noopener" href="https://github.com/beastmouth/rocketmq" >我是一个超链接<i class="fas fa-external-link-alt"></i></a>）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ... 省略部分代码</span></span><br><span class="line"><span class="comment">// 查找主题路由信息</span></span><br><span class="line">TopicPublishInfo topicPublishInfo = <span class="keyword">this</span>.tryToFindTopicPublishInfo(msg.getTopic());</span><br><span class="line"><span class="keyword">if</span> (topicPublishInfo != <span class="keyword">null</span> &amp;&amp; topicPublishInfo.ok()) &#123;</span><br><span class="line">    <span class="comment">// ... 省略部分代码</span></span><br><span class="line">    <span class="keyword">for</span> (; times &lt; timesTotal; times++) &#123;</span><br><span class="line">      <span class="comment">// 上次发送的broker名称</span></span><br><span class="line">      String lastBrokerName = <span class="keyword">null</span> == mq ? <span class="keyword">null</span> : mq.getBrokerName();</span><br><span class="line">      <span class="comment">// 选择一条messagequeue(轮询+失败规避)</span></span><br><span class="line">      MessageQueue mqSelected = <span class="keyword">this</span>.selectOneMessageQueue(topicPublishInfo, lastBrokerName);</span><br><span class="line">      <span class="keyword">if</span> (mqSelected != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// ... 省略部分代码</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// ... 省略部分代码</span></span><br><span class="line">          sendResult = <span class="keyword">this</span>.sendKernelImpl(msg, mq, communicationMode, sendCallback, topicPublishInfo, timeout - costTime);</span><br><span class="line">          endTimestamp = System.currentTimeMillis();</span><br><span class="line">          <span class="comment">// 失败规避</span></span><br><span class="line">          <span class="keyword">this</span>.updateFaultItem(mq.getBrokerName(), endTimestamp - beginTimestampPrev, <span class="keyword">false</span>);</span><br><span class="line">          <span class="keyword">switch</span> (communicationMode) &#123;</span><br><span class="line">            <span class="keyword">case</span> ASYNC:</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">case</span> ONEWAY:</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">case</span> SYNC:</span><br><span class="line">              <span class="keyword">if</span> (sendResult.getSendStatus() != SendStatus.SEND_OK) &#123;</span><br><span class="line">                <span class="comment">// 发送失败重试</span></span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">this</span>.defaultMQProducer.isRetryAnotherBrokerWhenNotStoreOK()) &#123;</span><br><span class="line">                  <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line"></span><br><span class="line">              <span class="keyword">return</span> sendResult;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="comment">/** 一系列异常处理 **/</span>) &#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>流程：</p>
+</li>
+<li><p>尝试获取Topic路由信息</p>
+</li>
+<li><p>选择一个队列（默认是轮询+失败规避）</p>
+</li>
+<li><p>发送消息，失败会重试</p>
+<h1 id="失败规避"><a href="#失败规避" class="headerlink" title="失败规避"></a><strong>失败规避</strong></h1><p>上面提到了失败规避，到底什么是失败规避呢？<br>在我们一次消息发送过程中，消息有可能发送失败。在消息发送失败，重试时选择发送消息的队列时，就会规避上次MessageQueue所在的Broker。这样能够减少很多不必要的请求（因为Broker宕机后，很大情况下这个Broker短时间内依旧是无法使用的）<br>那么，为什么会有宕机的Broker在我们的内存中存在？<br>因为NameSrv是根据心跳检测来确定Broker是否可用的（有间隔 10s），且消息生产者更新路由信息也是有间隔的（30s）。且为了Namesrv设计的简单，Namesrv不会主动将Broker宕机的信息推给消息生产者，而是需要消息生产者定时更新的时候，才会感知到Broker宕机。<br>在这期间存在误差，所以我们是要一个机制（失败规避策略）来减少一些不必要的性能消耗</p>
+</li>
+</ul>
+<p><strong>另外，失败规避默认是关闭的</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">boolean</span> sendLatencyFaultEnable = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateFaultItem</span><span class="params">(<span class="keyword">final</span> String brokerName, <span class="keyword">final</span> <span class="keyword">long</span> currentLatency, <span class="keyword">boolean</span> isolation)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.sendLatencyFaultEnable) &#123;</span><br><span class="line">        <span class="comment">// 默认以30s作为computeNotAvailableDuration的参数</span></span><br><span class="line">        <span class="keyword">long</span> duration = computeNotAvailableDuration(isolation ? <span class="number">30000</span> : currentLatency);</span><br><span class="line">        <span class="keyword">this</span>.latencyFaultTolerance.updateFaultItem(brokerName, currentLatency, duration);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="关于发送端消息的可靠性"><a href="#关于发送端消息的可靠性" class="headerlink" title="关于发送端消息的可靠性"></a><strong>关于发送端消息的可靠性</strong></h1><p>发送端消息的可靠性主要是靠消息发送重试<br>RocketMQ的架构中，可能会存在多个Broker为某个topic提供服务，这个topic的消息被存放在多个Broker下。（有点类似于Redis的Cluster）<br>当生产者往某个Broker发送消息失败时，会进行失败规避，选择其他提供服务的Broker，进行发送消息。确保消息能够被稳定的送到Broker中</p>
+<h1 id="消息重新发送，消息的msgid会发生变化吗"><a href="#消息重新发送，消息的msgid会发生变化吗" class="headerlink" title="消息重新发送，消息的msgid会发生变化吗"></a>消息重新发送，消息的msgid会发生变化吗</h1><p>msgId，对于客户端来说msgId是由客户端producer实例端生成的，具体来说，调用方法MessageClientIDSetter.createUniqIDBuffer()生成唯一的Id；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//for MessageBatch,ID has been set in the generating process</span></span><br><span class="line"><span class="keyword">if</span> (!(msg <span class="keyword">instanceof</span> MessageBatch)) &#123;</span><br><span class="line">    <span class="comment">// 为消息分配唯一的全局id</span></span><br><span class="line">    MessageClientIDSetter.setUniqID(msg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setUniqID</span><span class="params">(<span class="keyword">final</span> Message msg)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 因为有了这个判读，所以我们重试的时候，消息id是不会发生变化的</span></span><br><span class="line">    <span class="keyword">if</span> (msg.getProperty(MessageConst.PROPERTY_UNIQ_CLIENT_MESSAGE_ID_KEYIDX) == <span class="keyword">null</span>) &#123;</span><br><span class="line">        msg.putProperty(MessageConst.PROPERTY_UNIQ_CLIENT_MESSAGE_ID_KEYIDX, createUniqID());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String PROPERTY_UNIQ_CLIENT_MESSAGE_ID_KEYIDX = <span class="string">&quot;UNIQ_KEY&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>但是，offsetMsgId是会发生变化的<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%9F%BA%E7%A1%80%E7%AF%87%20Producer%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%20msgid.png"
+                      alt="RocketMQ基础篇 Producer发送消息 msgid.png"
+                ></p>
+<ul>
+<li>msgId，对于客户端来说msgId是由客户端producer实例端生成的，具体来说，调用方法<code>MessageClientIDSetter.createUniqIDBuffer()</code>生成唯一的Id；</li>
+<li>offsetMsgId，offsetMsgId是由Broker服务端在写入消息时生成的（采用”IP地址+Port端口”与“CommitLog的物理偏移量地址”做了一个字符串拼接），其中offsetMsgId就是在RocketMQ控制台直接输入查询的那个messageId。<h1 id="消息发送的时候，如何自己选择消息推送的队列"><a href="#消息发送的时候，如何自己选择消息推送的队列" class="headerlink" title="消息发送的时候，如何自己选择消息推送的队列"></a>消息发送的时候，如何自己选择消息推送的队列</h1>发送消息的时候可以自定义一个MessageQueueSelector，就可以自己选推到那个队列，实现顺序消息的需求了<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">send</span><span class="params">(<span class="keyword">final</span> Message msg, <span class="keyword">final</span> MessageQueueSelector selector, <span class="keyword">final</span> Object arg,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">final</span> SendCallback sendCallback)</span> <span class="keyword">throws</span> MQClientException, RemotingException,</span></span><br><span class="line"><span class="function">        InterruptedException</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> SendResult <span class="title">sendSelectImpl</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">        Message msg,</span></span></span><br><span class="line"><span class="params"><span class="function">        MessageQueueSelector selector,</span></span></span><br><span class="line"><span class="params"><span class="function">        Object arg,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">final</span> CommunicationMode communicationMode,</span></span></span><br><span class="line"><span class="params"><span class="function">        <span class="keyword">final</span> SendCallback sendCallback, <span class="keyword">final</span> <span class="keyword">long</span> timeout</span></span></span><br><span class="line"><span class="params"><span class="function">    )</span> <span class="keyword">throws</span> MQClientException, RemotingException, MQBrokerException, InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> beginStartTime = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">this</span>.makeSureStateOK();</span><br><span class="line">        Validators.checkMessage(msg, <span class="keyword">this</span>.defaultMQProducer);</span><br><span class="line"></span><br><span class="line">        TopicPublishInfo topicPublishInfo = <span class="keyword">this</span>.tryToFindTopicPublishInfo(msg.getTopic());</span><br><span class="line">        <span class="keyword">if</span> (topicPublishInfo != <span class="keyword">null</span> &amp;&amp; topicPublishInfo.ok()) &#123;</span><br><span class="line">            MessageQueue mq = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                List&lt;MessageQueue&gt; messageQueueList =</span><br><span class="line">                    mQClientFactory.getMQAdminImpl().parsePublishMessageQueues(topicPublishInfo.getMessageQueueList());</span><br><span class="line">                Message userMessage = MessageAccessor.cloneMessage(msg);</span><br><span class="line">                String userTopic = NamespaceUtil.withoutNamespace(userMessage.getTopic(), mQClientFactory.getClientConfig().getNamespace());</span><br><span class="line">                userMessage.setTopic(userTopic);</span><br><span class="line"></span><br><span class="line">                mq = mQClientFactory.getClientConfig().queueWithNamespace(selector.select(messageQueueList, userMessage, arg));</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> MQClientException(<span class="string">&quot;select message queue threw exception.&quot;</span>, e);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">long</span> costTime = System.currentTimeMillis() - beginStartTime;</span><br><span class="line">            <span class="keyword">if</span> (timeout &lt; costTime) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RemotingTooMuchRequestException(<span class="string">&quot;sendSelectImpl call timeout&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (mq != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">this</span>.sendKernelImpl(msg, mq, communicationMode, sendCallback, <span class="keyword">null</span>, timeout - costTime);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> MQClientException(<span class="string">&quot;select message queue return null.&quot;</span>, <span class="keyword">null</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        validateNameServerSetting();</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> MQClientException(<span class="string">&quot;No route info for this topic, &quot;</span> + msg.getTopic(), <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+有一个注意点：这种基于selector方式的，发送消息失败是不会重试的<br>原因：我的理解是我们自己自定义的selector，在没有规则策略的前提下，大概率还是选择到这个失败的队列里面。但是如果有规避策略的话，又和我们定义selector的本意违背了（例如我要实现顺序消息，结果失败重试把它丢到了其他队列，违背了顺序消息的本意）</li>
+</ul>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"26b8e6758f16d4524e69","clientSecret":"ecfd9e9a439bcb8a4c4fd21f4677fa102c68b352","repo":"beastmouth.github.io","owner":"beastmouth","admin":["beastmouth"],"distractionFreeMode":false,"createIssueManually":true};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：RocketMQ基础篇Producer发送消息</li>
+        <li>Post author：大黄</li>
+        <li>Create time：2022-08-05 10:02:53</li>
+        <li>
+            Post link：https://huangbangjing.cn/2022/08/05/RocketMQ基础篇Producer发送消息/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/08/05/RocketMQ%E5%9F%BA%E7%A1%80%E7%AF%87Consumer%E6%B6%88%E8%B4%B9%E6%B6%88%E6%81%AF/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">RocketMQ基础篇Consumer消费消息</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/08/02/Dubbo%E5%9F%BA%E7%A1%80%E7%AF%87%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Dubbo基础篇远程调用</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2023&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">大黄</a>
+        </div>
+        
+            <script async  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+            <div class="icp-info info-item"><a target="_blank" rel="nofollow" href="https://beian.miit.gov.cn">浙ICP备2021039538号-1</a></div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">消息队列负载均衡</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%BC%82%E6%AD%A5%E6%B6%88%E6%81%AF"><span class="nav-text">关于异步消息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E7%9A%84%E4%B8%BB%E5%B9%B2%E9%80%BB%E8%BE%91"><span class="nav-text">消息发送的主干逻辑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%B1%E8%B4%A5%E8%A7%84%E9%81%BF"><span class="nav-text">失败规避</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%8F%91%E9%80%81%E7%AB%AF%E6%B6%88%E6%81%AF%E7%9A%84%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-text">关于发送端消息的可靠性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%87%8D%E6%96%B0%E5%8F%91%E9%80%81%EF%BC%8C%E6%B6%88%E6%81%AF%E7%9A%84msgid%E4%BC%9A%E5%8F%91%E7%94%9F%E5%8F%98%E5%8C%96%E5%90%97"><span class="nav-text">消息重新发送，消息的msgid会发生变化吗</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E5%A6%82%E4%BD%95%E8%87%AA%E5%B7%B1%E9%80%89%E6%8B%A9%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%E7%9A%84%E9%98%9F%E5%88%97"><span class="nav-text">消息发送的时候，如何自己选择消息推送的队列</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","hOffset":-20,"vOffset":-80,"width":200,"height":400},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

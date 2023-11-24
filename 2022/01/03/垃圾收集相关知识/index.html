@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="大黄">
+    
+    <title>
+        
+            垃圾收集相关知识 |
+        
+        DH大黄
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"huangbangjing.cn","root":"/","language":"en","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"stay gold","backgound_img":"/images/bg.svg"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                DH大黄
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                CATEGORIES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/links"
+                            >
+                                LINKS
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">CATEGORIES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/links">LINKS</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">垃圾收集相关知识</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">大黄</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-01-03 16:31:15</span>
+        <span class="mobile">2022-01-03 16:31</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/JVM/">JVM</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>3k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>10 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="垃圾收集相关知识"><a href="#垃圾收集相关知识" class="headerlink" title="垃圾收集相关知识"></a>垃圾收集相关知识</h1><h2 id="思维导图"><a href="#思维导图" class="headerlink" title="思维导图"></a>思维导图</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/JVM/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE.png"
+                      alt="垃圾回收思维导图.jpg"
+                ></p>
+<h2 id="回收的对象"><a href="#回收的对象" class="headerlink" title="回收的对象"></a>回收的对象</h2><p>堆，方法区（方法区虚拟机不要求实现）</p>
+<h2 id="如何判断一个对象可以回收"><a href="#如何判断一个对象可以回收" class="headerlink" title="如何判断一个对象可以回收"></a>如何判断一个对象可以回收</h2><h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><p>主流的Java虚拟机没有使用该算法。因为简单的引用计数无法解决循环引用问题，需要很多额外的操作</p>
+<h3 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h3><p>GC ROOT 到该对象是否可达</p>
+<h4 id="能够作为GC-ROOT的对象"><a href="#能够作为GC-ROOT的对象" class="headerlink" title="能够作为GC ROOT的对象"></a>能够作为GC ROOT的对象</h4><ul>
+<li>在虚拟机栈（栈帧中的本地变量表）中引用的对象，譬如各个线程被调用的方法堆栈中使用到的 参数、局部变量、临时变量等。</li>
+<li>在方法区中类静态属性引用的对象，譬如Java类的引用类型静态变量。</li>
+<li>在方法区中常量引用的对象，譬如字符串常量池（String Table）里的引用。</li>
+<li>在本地方法栈中JNI（即通常所说的Native方法）引用的对象。</li>
+<li>Java虚拟机内部的引用，如基本数据类型对应的Class对象，一些常驻的异常对象（比如 NullPointExcepiton、OutOfMemoryError）等，还有系统类加载器。</li>
+<li>所有被同步锁（synchronized关键字）持有的对象。</li>
+<li>反映Java虚拟机内部情况的JMXBean、JVMTI中注册的回调、本地代码缓存等。</li>
+<li>同时还会有一些其他对象被“临时性”的加入</li>
+</ul>
+<h4 id="关于GC-Roots根结点枚举的一个优化"><a href="#关于GC-Roots根结点枚举的一个优化" class="headerlink" title="关于GC Roots根结点枚举的一个优化"></a>关于GC Roots根结点枚举的一个优化</h4><p>首先要先明确一个前提：虚拟机（就算是几乎不会发生停顿的CMS、G1、ZGC等收集器）在进行根结点枚举的时候，都是需要STW的。因为根结点枚举始终要在一个能够保障一致性的快照中才能进行的（整个枚举过程中子系统不会再出现根结点集合的对象引用关系的变化）</p>
+<p>可作为GC Roots的节点主要在全局性的引用（例如常量或类静态属性）与执行上下文（例如 栈帧中的本地变量表）中。但是尽管我们目标明确，但是查找过程要做到高效并不是一件容易的事情。因为随着Java应用越来越大，光是方法去的大小就常有数百上千兆，每次都从这边开始查找，无疑是一个耗时的操作。</p>
+<p>此时就用到了个OopMap来记录对象引用（这样就不需要每次都从方法区开始找了）</p>
+<p>OopMap在类加载动作完成之后，HotSpot就可以把对象内什么偏移量上是什么类型的数据给计算出来</p>
+<h4 id="安全点"><a href="#安全点" class="headerlink" title="安全点"></a>安全点</h4><p>但是要知道，不是每条指令都生成对应的OopMap，只在特定位置生成对应的OopMap，这些位置就被称为安全点（SafePoint）（安全点太少会导致收集器等待时间过程，太多又回增大运行时的内存负荷）</p>
+<p>可以作为安全点的几个地方：方法调用、循环跳转、异常跳转可以作为安全点</p>
+<p>安全点=&gt;具有让程序长时间执行的特征=&gt;最明显的特征就是指令序列的复用，即上述的几个安全点</p>
+<p>但是在我们进行垃圾回收，并不是所有的线程都会处于安全点。此时有两种方法可以解决这个问题</p>
+<ul>
+<li>抢先式中断：不需要线程执行代码配合，在GC时，系统让所有的用户线程全部中断如果线程没有到安全点，则恢复线程执行，知道线程执行到安全点目前几乎没有虚拟机使用这种方式</li>
+<li>主动式中断：虚拟机会设置一个标志位，每个线程在执行过程中会不断地主动去轮询这个标识位一旦标志位true，线程就会在自己最近的安全点主动中断挂起<ul>
+<li>由于轮询标识经常出现，需要考虑指令的高效。HotSpot使用内存保护陷阱的方式，当需要暂停用户线程时，就将0x160100的内存页设置为不可读</li>
+</ul>
+</li>
+</ul>
+<h4 id="安全区域"><a href="#安全区域" class="headerlink" title="安全区域"></a>安全区域</h4><p>刚刚上述说到的，都是在工作中的线程。但是正常运行的JVM虚拟机，肯定不止这种情况（Running）的线程，还有处于Sleep或者Blocked状态的线程，他们是无法响应虚拟机的中断请求的，无法走到安全点去挂起自己。此时就引入了个安全区域的概念</p>
+<p>用户线程进入安全区域时，就会标识自己进入安全区域，那么在此期间虚拟机发起垃圾收集时，就不会去管这些已经声明自己在安全区域中的线程要离开时，会检查是否完成根结点的枚举，如果未完成则会一直等待，直到收到可以离开安全区域的信号为止</p>
+<p>同时关于可达性算法，这里提一个概念，三色标记法</p>
+<h4 id="三色标记法"><a href="#三色标记法" class="headerlink" title="三色标记法"></a>三色标记法</h4><ul>
+<li>白色：对象未被垃圾收集器访问过</li>
+<li>黑色：对象已被垃圾收集器访问过，且这个对象的所有引用都已经扫描过，它是安全存活的如果有其他对象引用指向了黑色对象，无须重新扫描一遍</li>
+<li>灰色：标识对象已经被垃圾收集器访问过，但这个对象上至少存在一个引用还没有被扫描过</li>
+</ul>
+<h4 id="三色标记法的两个问题"><a href="#三色标记法的两个问题" class="headerlink" title="三色标记法的两个问题"></a>三色标记法的两个问题</h4><p>问题的前提：用户的线程与收集器并发的工作，在标记的时候，用户的线程也会去修改引用关系。会出现两个问题</p>
+<ul>
+<li>原本应该消亡的对象，被错误的标记为存活。（这个问题可以容忍，本身发生的概率不高，下次垃圾回收时再回收就可以了）</li>
+<li>原本应该存活的对象被标记为消亡<strong>（这就不能容忍了）</strong></li>
+</ul>
+<p>第二种问题发生的原因：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/JVM/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%20%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E6%B3%95%E4%BA%A7%E7%94%9F%E7%9A%84%E9%97%AE%E9%A2%98.jpeg"
+                      alt="垃圾回收 三色标记法产生的问题.jpeg"
+                ></p>
+<p>产生上述问题需要两个前提条件</p>
+<ul>
+<li>赋值器插入了一条或多条从黑色对象到白色对象的新引用</li>
+<li>赋值器删除了全部从灰色对象到该白色对象的直接或间接引用</li>
+</ul>
+<p>增量更新（破坏第一个条件）：（CMS用到了）</p>
+<p>当黑色对象插入新的指向白色对象的引用关系时，就将这个新插入的引用记录下来，等并发扫描结束之后，再将这些记录过的引用关系中的黑色对象为根，重新扫描一次。</p>
+<p>这可以简化理解为，黑色对象一旦新插入了指向白色对象的引用之后，它就变回灰色对象了。</p>
+<p>原始快照（破坏第二个条件）：（G1用到了）</p>
+<p>当灰色对象要删除指向白色对象的引用关系时，就将这个要删 除的引用记录下来，在并发扫描结束之后，再将这些记录过的引用关系中的灰色对象为根，重新扫描一次。</p>
+<p>这也可以简化理解为，无论引用关系删除与否，都会按照刚刚开始扫描那一刻的对象图快照来进行搜索。</p>
+<p>即：将删除引用的白色对象作为根，重新扫描，保证当前白色对象不会被误删。不好的地方就是这个白色对象如果没有再被引用，也得等到下次垃圾收集时被回收<em>（ps：这一块仅是自己的理解，后续还需要求证）</em></p>
+<h2 id="分代收集理论"><a href="#分代收集理论" class="headerlink" title="分代收集理论"></a>分代收集理论</h2><p>因为将Java堆划分出不同的区域，所以才会有垃圾收集器每次只回收其中一个或某些部分的区域</p>
+<h3 id="为什么需要分代收集"><a href="#为什么需要分代收集" class="headerlink" title="为什么需要分代收集"></a>为什么需要分代收集</h3><p>如果一个区域内的大多数对象是朝生夕灭，难以熬过垃圾收集过程</p>
+<p>那么将他们集中在一起，每次只需要考虑需要保留的少量存活对象而不是去标记那些大量需要回收的对象，</p>
+<p>就可以以较低的成本回收大量的空间</p>
+<p>同时，将那些难以回收的对象统一放在一个区域中，就可以以较低的频率去回收这块区域，</p>
+<p>兼顾了垃圾收集的时间开销和内存空间的有效利用</p>
+<h3 id="相关名词"><a href="#相关名词" class="headerlink" title="相关名词"></a>相关名词</h3><p>Partial GC（部分收集）才有了 Minor GC/Young GC（新生代收集）、Major GC/Old GC（老年代收集）、Full GC（整堆收集）、Mixed GC（收集整个新生代以及部分老年代，只有G1收集器有这样的行为）</p>
+<p>也才能发展出 “标记-复制算法”，“标记-清除算法”，“标记-整理算法”</p>
+<h3 id="跨代引用问题"><a href="#跨代引用问题" class="headerlink" title="跨代引用问题"></a>跨代引用问题</h3><p>新生代的对象可能会被老年代引用，老年代的对象也有可能会被新生代引用</p>
+<p>假如此时我们要回收新生代的对象，就需要去扫描整个老年代，这无疑是一个不合理的操作</p>
+<p>此时会在新生代上建立一个全局的数据结构（记忆集 Remembered Set），将老年代划分成若干小块，标记处老年代的那一块内存存在跨代引用。然后在MinorGC的时候，只需要把包含了跨代引用的小块内存里面的对象假如到GC Roots进行扫描即可</p>
+<p>关于记忆集，存在三种精度</p>
+<ul>
+<li>字长精度：每个记录精确到一个机器字长（就是处理器的寻址位数，如常见的32位或64位，这个 精度决定了机器访问物理内存地址的指针长度），该字包含跨代指针。</li>
+<li>对象精度：每个记录精确到一个对象，该对象里有字段含有跨代指针。</li>
+<li>卡精度：每个记录精确到一块内存区域，该区域内有对象含有跨代指针。</li>
+</ul>
+<p>目前我们用到的最多的一种就是卡表。卡表（Card Table）是卡精度的一种实现方式</p>
+<p>卡表中的么一个元素都对应着其标识的内存区域中一块特定大小的内存块，这个 内存块被称作“卡页”（Card Page）</p>
+<p>一个卡页的内存中通常不止一个对象，只要一个卡页内有一个（或多个）对象存在跨代指针，则就在对应卡表的数组元素的值标识位1，代表这个元素变脏。（GC时只需要筛选出卡表中变脏的元素，然后将其加入到GC Roots中一并扫描）</p>
+<p>此处HotSpot使用写屏障来维护卡表。（可以使用类比的思想，AOP的Around来看待写屏障维护卡表的操作）在引用对象的赋值会产生一个环绕（Around）通知。在赋值前的部分的写屏障叫作写前屏障（Pre-Write Barrier），在赋值后的则叫作写后屏障（Post-Write Barrier）。HotSpot虚拟机的许多收集器中都有使用到写屏障，但直 至G1收集器出现之前，其他收集器都只用到了写后屏障。</p>
+<h2 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h2><ul>
+<li>标记-清除算法（标记过程也会有STW，但是标记一般很快）（HotSpot的CMS收集器，关注延迟）</li>
+<li>标记-复制算法</li>
+<li>标记-整理算法（移动必须要STW，对象越多越大耗时越长）（HotSpot的ParallelScavenge收集器，关注吞吐）</li>
+</ul>
+<p>是否移动对象都存在弊端，移动则是在回收对象时复杂，不移动则是在内存分配时复杂。相比来说，内存分配和访问的频率会比回收高很多</p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"26b8e6758f16d4524e69","clientSecret":"ecfd9e9a439bcb8a4c4fd21f4677fa102c68b352","repo":"beastmouth.github.io","owner":"beastmouth","admin":["beastmouth"],"distractionFreeMode":false,"createIssueManually":true};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：垃圾收集相关知识</li>
+        <li>Post author：大黄</li>
+        <li>Create time：2022-01-03 16:31:15</li>
+        <li>
+            Post link：https://huangbangjing.cn/2022/01/03/垃圾收集相关知识/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/01/13/%E6%97%B6%E9%97%B4%E8%BD%AE/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">时间轮</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2021/12/30/%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%EF%BC%88new%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%EF%BC%89/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">对象创建（new一个对象）</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2023&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">大黄</a>
+        </div>
+        
+            <script async  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+            <div class="icp-info info-item"><a target="_blank" rel="nofollow" href="https://beian.miit.gov.cn">浙ICP备2021039538号-1</a></div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86"><span class="nav-text">垃圾收集相关知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE"><span class="nav-text">思维导图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E6%94%B6%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="nav-text">回收的对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E5%8F%AF%E4%BB%A5%E5%9B%9E%E6%94%B6"><span class="nav-text">如何判断一个对象可以回收</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E7%AE%97%E6%B3%95"><span class="nav-text">引用计数算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90%E7%AE%97%E6%B3%95"><span class="nav-text">可达性分析算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%83%BD%E5%A4%9F%E4%BD%9C%E4%B8%BAGC-ROOT%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="nav-text">能够作为GC ROOT的对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8EGC-Roots%E6%A0%B9%E7%BB%93%E7%82%B9%E6%9E%9A%E4%B8%BE%E7%9A%84%E4%B8%80%E4%B8%AA%E4%BC%98%E5%8C%96"><span class="nav-text">关于GC Roots根结点枚举的一个优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E7%82%B9"><span class="nav-text">安全点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F"><span class="nav-text">安全区域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E6%B3%95"><span class="nav-text">三色标记法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E6%B3%95%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-text">三色标记法的两个问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E4%BB%A3%E6%94%B6%E9%9B%86%E7%90%86%E8%AE%BA"><span class="nav-text">分代收集理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%88%86%E4%BB%A3%E6%94%B6%E9%9B%86"><span class="nav-text">为什么需要分代收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%90%8D%E8%AF%8D"><span class="nav-text">相关名词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%A8%E4%BB%A3%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98"><span class="nav-text">跨代引用问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95"><span class="nav-text">垃圾回收算法</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","hOffset":-20,"vOffset":-80,"width":200,"height":400},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

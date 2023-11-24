@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="大黄">
+    
+    <title>
+        
+            Dubbo基础篇服务引用 |
+        
+        DH大黄
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"huangbangjing.cn","root":"/","language":"en","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"stay gold","backgound_img":"/images/bg.svg"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                DH大黄
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                CATEGORIES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/links"
+                            >
+                                LINKS
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">CATEGORIES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/links">LINKS</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">Dubbo基础篇服务引用</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">大黄</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2022-08-02 21:40:14</span>
+        <span class="mobile">2022-08-02 21:40</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/Dubbo/">Dubbo</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>2.3k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>12 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="完整流程图"><a href="#完整流程图" class="headerlink" title="完整流程图"></a>完整流程图</h1><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/Dubbo/Dubbo%E5%9F%BA%E7%A1%80%E7%AF%87%20%E6%9C%8D%E5%8A%A1%E5%BC%95%E7%94%A8%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B.png"
+                      alt="Dubbo基础篇 服务引用完整流程.png"
+                ></p>
+<h1 id="一句话概括流程"><a href="#一句话概括流程" class="headerlink" title="一句话概括流程"></a>一句话概括流程</h1><p>具体可以概括为以下五点</p>
+<ul>
+<li><p>两种模式（饿汉式/懒汉式）</p>
+</li>
+<li><p>组装URL并向注册中心注册</p>
+</li>
+<li><p>获取服务提供者信息并根据协议（默认Dubbo协议）开始Invoker的创建流程</p>
+</li>
+<li><p>通过Cluster包装Invoker（默认FailoverCluster）</p>
+</li>
+<li><p>返回代理类</p>
+<h1 id="服务引用的两个时机"><a href="#服务引用的两个时机" class="headerlink" title="服务引用的两个时机"></a>服务引用的两个时机</h1></li>
+<li><p>饿汉式：通过实现Spring的 IntitalizingBean 接口的 afterProperties 方法，容器通过调用 ReferenceBean 的 afterPropertiesSet 方法时引入服务 (ReferenceBean实现了IntitalizingBean接口)<br>Bean实例化完成后填充属性时引入服务，这里具体的Bean是Invoker的代理对象</p>
+</li>
+<li><p>懒汉式：只有当这个服务被注入到其他类中时启动引入流程</p>
+</li>
+</ul>
+<p><em>注释：我们创建出来的远程调用的代理对象，实际上是ReferenceBean的一个成员变量（相当于我们在代理对象上套了个壳，把这个壳作为一个bean注册到spring容器中）</em><br>饿汉式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Initializes Dubbo&#x27;s Config Beans before @Reference bean autowiring</span></span><br><span class="line">    prepareDubboConfigBeans();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// lazy init by default.</span></span><br><span class="line">    <span class="keyword">if</span> (init == <span class="keyword">null</span>) &#123;</span><br><span class="line">        init = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// eager init if necessary.</span></span><br><span class="line">    <span class="keyword">if</span> (shouldInit()) &#123;</span><br><span class="line">        getObject();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>懒汉式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> get();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (destroyed) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">&quot;The invoker of ReferenceConfig(&quot;</span> + url + <span class="string">&quot;) has already destroyed!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (ref == <span class="keyword">null</span>) &#123;</span><br><span class="line">        init();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ref;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于这点的解释。如果 <a class="link"   href="dubbo:reference" >dubbo:reference<i class="fas fa-external-link-alt"></i></a> 的init属性开启（饿汉式），创建完ReferenceBean 的时候，在afterProperties方法里面调用对应的getObject方法，将对应的Invoker的Bean创建出来并注册到容器中。而懒汉式则是在其他的Bean去注入它的时候，才会去进行Invoker的创建流程<br>然后ContextRefreshedEvent事件那一步的处理会将我上面没有去实例化的那些Invoker也实例化一次（个人猜测是那些懒加载没有被其他Bean注入的Bean）<br><strong>为什么要是用FactoryBean接口的方式去创建对应的Bean</strong>。因为FactoryBean本身的作用是为了能够进行复杂的Bean逻辑创建，而不通过Spring本身的三级缓存的方式创建Bean。而且此处的Invoker还涉及到动态代理之类的情况，FactoryBean就很适合这种创建Bean场景<br>同样的，例如SpringCloud的Feign之类的也是通过这样的方式注入Bean</p>
+<h1 id="入口关键类-ReferenceConfig"><a href="#入口关键类-ReferenceConfig" class="headerlink" title="入口关键类 ReferenceConfig"></a>入口关键类 ReferenceConfig</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">get</span><span class="params">(ReferenceConfigBase&lt;T&gt; referenceConfig)</span> </span>&#123;</span><br><span class="line">    String key = generator.generateKey(referenceConfig);</span><br><span class="line">    Class&lt;?&gt; type = referenceConfig.getInterfaceClass();</span><br><span class="line"></span><br><span class="line">    proxies.computeIfAbsent(type, _t -&gt; <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;());</span><br><span class="line"></span><br><span class="line">    ConcurrentMap&lt;String, Object&gt; proxiesOfType = proxies.get(type);</span><br><span class="line">    proxiesOfType.computeIfAbsent(key, _k -&gt; &#123;</span><br><span class="line">        <span class="comment">// 触发的地方，最终调用到init</span></span><br><span class="line">        Object proxy = referenceConfig.get();</span><br><span class="line">        referredReferences.put(key, referenceConfig);</span><br><span class="line">        <span class="keyword">return</span> proxy;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (T) proxiesOfType.get(key);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (initialized) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (bootstrap == <span class="keyword">null</span>) &#123;</span><br><span class="line">        bootstrap = DubboBootstrap.getInstance();</span><br><span class="line">        bootstrap.initialize();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    checkAndUpdateSubConfigs();</span><br><span class="line"></span><br><span class="line">    checkStubAndLocal(interfaceClass);</span><br><span class="line">    ConfigValidationUtils.checkMock(interfaceClass, <span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">    map.put(SIDE_KEY, CONSUMER_SIDE);</span><br><span class="line"></span><br><span class="line">    ReferenceConfigBase.appendRuntimeParameters(map);</span><br><span class="line">    <span class="keyword">if</span> (!ProtocolUtils.isGeneric(generic)) &#123;</span><br><span class="line">        String revision = Version.getVersion(interfaceClass, version);</span><br><span class="line">        <span class="keyword">if</span> (revision != <span class="keyword">null</span> &amp;&amp; revision.length() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(REVISION_KEY, revision);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String[] methods = Wrapper.getWrapper(interfaceClass).getMethodNames();</span><br><span class="line">        <span class="keyword">if</span> (methods.length == <span class="number">0</span>) &#123;</span><br><span class="line">            logger.warn(<span class="string">&quot;No method found in service interface &quot;</span> + interfaceClass.getName());</span><br><span class="line">            map.put(METHODS_KEY, ANY_VALUE);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            map.put(METHODS_KEY, StringUtils.join(<span class="keyword">new</span> HashSet&lt;String&gt;(Arrays.asList(methods)), COMMA_SEPARATOR));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    map.put(INTERFACE_KEY, interfaceName);</span><br><span class="line">    AbstractConfig.appendParameters(map, getMetrics());</span><br><span class="line">    AbstractConfig.appendParameters(map, getApplication());</span><br><span class="line">    AbstractConfig.appendParameters(map, getModule());</span><br><span class="line">    <span class="comment">// remove &#x27;default.&#x27; prefix for configs from ConsumerConfig</span></span><br><span class="line">    <span class="comment">// appendParameters(map, consumer, Constants.DEFAULT_KEY);</span></span><br><span class="line">    AbstractConfig.appendParameters(map, consumer);</span><br><span class="line">    AbstractConfig.appendParameters(map, <span class="keyword">this</span>);</span><br><span class="line">    MetadataReportConfig metadataReportConfig = getMetadataReportConfig();</span><br><span class="line">    <span class="keyword">if</span> (metadataReportConfig != <span class="keyword">null</span> &amp;&amp; metadataReportConfig.isValid()) &#123;</span><br><span class="line">        map.putIfAbsent(METADATA_KEY, REMOTE_METADATA_STORAGE_TYPE);</span><br><span class="line">    &#125;</span><br><span class="line">    Map&lt;String, AsyncMethodInfo&gt; attributes = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (CollectionUtils.isNotEmpty(getMethods())) &#123;</span><br><span class="line">        attributes = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (MethodConfig methodConfig : getMethods()) &#123;</span><br><span class="line">            AbstractConfig.appendParameters(map, methodConfig, methodConfig.getName());</span><br><span class="line">            String retryKey = methodConfig.getName() + <span class="string">&quot;.retry&quot;</span>;</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(retryKey)) &#123;</span><br><span class="line">                String retryValue = map.remove(retryKey);</span><br><span class="line">                <span class="keyword">if</span> (<span class="string">&quot;false&quot;</span>.equals(retryValue)) &#123;</span><br><span class="line">                    map.put(methodConfig.getName() + <span class="string">&quot;.retries&quot;</span>, <span class="string">&quot;0&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            AsyncMethodInfo asyncMethodInfo = AbstractConfig.convertMethodConfig2AsyncInfo(methodConfig);</span><br><span class="line">            <span class="keyword">if</span> (asyncMethodInfo != <span class="keyword">null</span>) &#123;</span><br><span class="line"><span class="comment">//                    consumerModel.getMethodModel(methodConfig.getName()).addAttribute(ASYNC_KEY, asyncMethodInfo);</span></span><br><span class="line">                attributes.put(methodConfig.getName(), asyncMethodInfo);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    String hostToRegistry = ConfigUtils.getSystemProperty(DUBBO_IP_TO_REGISTRY);</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.isEmpty(hostToRegistry)) &#123;</span><br><span class="line">        hostToRegistry = NetUtils.getLocalHost();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isInvalidLocalHost(hostToRegistry)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">&quot;Specified invalid registry ip from property:&quot;</span> + DUBBO_IP_TO_REGISTRY + <span class="string">&quot;, value:&quot;</span> + hostToRegistry);</span><br><span class="line">    &#125;</span><br><span class="line">    map.put(REGISTER_IP_KEY, hostToRegistry);</span><br><span class="line"></span><br><span class="line">    serviceMetadata.getAttachments().putAll(map);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建代理 即生成invoker（代理中包括invoker）</span></span><br><span class="line">    ref = createProxy(map);</span><br><span class="line"></span><br><span class="line">    serviceMetadata.setTarget(ref);</span><br><span class="line">    serviceMetadata.addAttribute(PROXY_CLASS_REF, ref);</span><br><span class="line">    ConsumerModel consumerModel = repository.lookupReferredService(serviceMetadata.getServiceKey());</span><br><span class="line">    consumerModel.setProxyObject(ref);</span><br><span class="line">    consumerModel.init(attributes);</span><br><span class="line"></span><br><span class="line">    initialized = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    checkInvokerAvailable();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// dispatch a ReferenceConfigInitializedEvent since 2.7.4</span></span><br><span class="line">    dispatch(<span class="keyword">new</span> ReferenceConfigInitializedEvent(<span class="keyword">this</span>, invoker));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="创建代理类"><a href="#创建代理类" class="headerlink" title="创建代理类"></a>创建代理类</h2><p>主要分为以下几点</p>
+<ul>
+<li>injvm：走jvm内部调用（自己服务中的dubbo接口调用）</li>
+<li>配置了URL：点对点</li>
+<li>未配置URL，从注册中心获取服务提供者信息<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> T <span class="title">createProxy</span><span class="params">(Map&lt;String, String&gt; map)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (shouldJvmRefer(map)) &#123;</span><br><span class="line">        <span class="comment">// 本地调用的情况</span></span><br><span class="line">        URL url = <span class="keyword">new</span> URL(LOCAL_PROTOCOL, LOCALHOST_VALUE, <span class="number">0</span>, interfaceClass.getName()).addParameters(map);</span><br><span class="line">        invoker = REF_PROTOCOL.refer(interfaceClass, url);</span><br><span class="line">        <span class="keyword">if</span> (logger.isInfoEnabled()) &#123;</span><br><span class="line">            logger.info(<span class="string">&quot;Using injvm service &quot;</span> + interfaceClass.getName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        urls.clear();</span><br><span class="line">        <span class="comment">// 配置的url的情况 点对点/注册中心地址</span></span><br><span class="line">        <span class="keyword">if</span> (url != <span class="keyword">null</span> &amp;&amp; url.length() &gt; <span class="number">0</span>) &#123; <span class="comment">// user specified URL, could be peer-to-peer address, or register center&#x27;s address.</span></span><br><span class="line">            String[] us = SEMICOLON_SPLIT_PATTERN.split(url);</span><br><span class="line">            <span class="keyword">if</span> (us != <span class="keyword">null</span> &amp;&amp; us.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (String u : us) &#123;</span><br><span class="line">                    URL url = URL.valueOf(u);</span><br><span class="line">                    <span class="keyword">if</span> (StringUtils.isEmpty(url.getPath())) &#123;</span><br><span class="line">                        url = url.setPath(interfaceName);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (UrlUtils.isRegistry(url)) &#123;</span><br><span class="line">                        <span class="comment">// 如果是注册中心，将map转换为查询字符串，并作为refer参数的值添加到url中</span></span><br><span class="line">                        urls.add(url.addParameterAndEncoded(REFER_KEY, StringUtils.toQueryString(map)));</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="comment">// 点对点直连，合并url，移除一些服务提供者的配置</span></span><br><span class="line">                        urls.add(ClusterUtils.mergeUrl(url, map));</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">// assemble URL from register center&#x27;s configuration</span></span><br><span class="line">            <span class="comment">// 未配置url的情况</span></span><br><span class="line">            <span class="comment">// if protocols not injvm checkRegistry</span></span><br><span class="line">            <span class="keyword">if</span> (!LOCAL_PROTOCOL.equalsIgnoreCase(getProtocol())) &#123;</span><br><span class="line">                checkRegistry();</span><br><span class="line">                <span class="comment">// 获取注册中心地址</span></span><br><span class="line">                List&lt;URL&gt; us = ConfigValidationUtils.loadRegistries(<span class="keyword">this</span>, <span class="keyword">false</span>);</span><br><span class="line">                <span class="keyword">if</span> (CollectionUtils.isNotEmpty(us)) &#123;</span><br><span class="line">                    <span class="keyword">for</span> (URL u : us) &#123;</span><br><span class="line">                        URL monitorUrl = ConfigValidationUtils.loadMonitor(<span class="keyword">this</span>, u);</span><br><span class="line">                        <span class="keyword">if</span> (monitorUrl != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            map.put(MONITOR_KEY, URL.encode(monitorUrl.toFullString()));</span><br><span class="line">                        &#125;</span><br><span class="line">                        urls.add(u.addParameterAndEncoded(REFER_KEY, StringUtils.toQueryString(map))); <span class="comment">// registry://127.0.0.1:2181/org.apache.dubbo.registry.RegistryService?application=dubbo-demo-api-consumer&amp;dubbo=2.0.2&amp;pid=52327&amp;refer=application=dubbo-demo-api-consumer&amp;dubbo=2.0.2&amp;generic=true&amp;interface=org.apache.dubbo.demo.DemoService&amp;pid=52327&amp;register.ip=10.167.10.19&amp;side=consumer&amp;sticky=false&amp;timestamp=1631087606024&amp;registry=zookeeper&amp;timestamp=1631087917015</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (urls.isEmpty()) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">&quot;No such any registry to reference &quot;</span> + interfaceName + <span class="string">&quot; on the consumer &quot;</span> + NetUtils.getLocalHost() + <span class="string">&quot; use dubbo version &quot;</span> + Version.getVersion() + <span class="string">&quot;, please config &lt;dubbo:registry address=\&quot;...\&quot; /&gt; to your spring config.&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="keyword">if</span> (urls.size() == <span class="number">1</span>) &#123;</span><br><span class="line">            invoker = REF_PROTOCOL.refer(interfaceClass, urls.get(<span class="number">0</span>));</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            List&lt;Invoker&lt;?&gt;&gt; invokers = <span class="keyword">new</span> ArrayList&lt;Invoker&lt;?&gt;&gt;();</span><br><span class="line">            URL registryURL = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">for</span> (URL url : urls) &#123;</span><br><span class="line">                invokers.add(REF_PROTOCOL.refer(interfaceClass, url));</span><br><span class="line">                <span class="keyword">if</span> (UrlUtils.isRegistry(url)) &#123;</span><br><span class="line">                    registryURL = url; <span class="comment">// use last registry url</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (registryURL != <span class="keyword">null</span>) &#123; <span class="comment">// registry url is available</span></span><br><span class="line">                <span class="comment">// for multi-subscription scenario, use &#x27;zone-aware&#x27; policy by default</span></span><br><span class="line">                String cluster = registryURL.getParameter(CLUSTER_KEY, ZoneAwareCluster.NAME);</span><br><span class="line">                <span class="comment">// The invoker wrap sequence would be: ZoneAwareClusterInvoker(StaticDirectory) -&gt; FailoverClusterInvoker(RegistryDirectory, routing happens here) -&gt; Invoker</span></span><br><span class="line">                invoker = Cluster.getCluster(cluster, <span class="keyword">false</span>).join(<span class="keyword">new</span> StaticDirectory(registryURL, invokers));</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123; <span class="comment">// not a registry url, must be direct invoke.</span></span><br><span class="line">                String cluster = CollectionUtils.isNotEmpty(invokers)</span><br><span class="line">                        ? (invokers.get(<span class="number">0</span>).getUrl() != <span class="keyword">null</span> ? invokers.get(<span class="number">0</span>).getUrl().getParameter(CLUSTER_KEY, ZoneAwareCluster.NAME) : Cluster.DEFAULT)</span><br><span class="line">                        : Cluster.DEFAULT;</span><br><span class="line">                invoker = Cluster.getCluster(cluster).join(<span class="keyword">new</span> StaticDirectory(invokers));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (logger.isInfoEnabled()) &#123;</span><br><span class="line">        logger.info(<span class="string">&quot;Refer dubbo service &quot;</span> + interfaceClass.getName() + <span class="string">&quot; from url &quot;</span> + invoker.getUrl());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    URL consumerURL = <span class="keyword">new</span> URL(CONSUMER_PROTOCOL, map.remove(REGISTER_IP_KEY), <span class="number">0</span>, map.get(INTERFACE_KEY), map);</span><br><span class="line">    MetadataUtils.publishServiceDefinition(consumerURL);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// create service proxy 创建代理服务</span></span><br><span class="line">    <span class="keyword">return</span> (T) PROXY_FACTORY.getProxy(invoker, ProtocolUtils.isGeneric(generic));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+此处细讲一下通过注册中心创建Invoker的方式（多个服务提供者的情况）<br>遍历注册中心，将注册中心所有的服务提供者信息（DynamicDirectory）汇集起来，创建出一个ClusterInvoker，并将ClusterInvoker的代理对象T返回给调用点<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Invoker&lt;?&gt;&gt; invokers = <span class="keyword">new</span> ArrayList&lt;Invoker&lt;?&gt;&gt;();</span><br><span class="line">URL registryURL = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">for</span> (URL url : urls) &#123;</span><br><span class="line">		<span class="comment">// 引用服务</span></span><br><span class="line">    invokers.add(REF_PROTOCOL.refer(interfaceClass, url));</span><br><span class="line">    <span class="keyword">if</span> (UrlUtils.isRegistry(url)) &#123;</span><br><span class="line">        registryURL = url; <span class="comment">// use last registry url</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (registryURL != <span class="keyword">null</span>) &#123; <span class="comment">// registry url is available</span></span><br><span class="line">    <span class="comment">// for multi-subscription scenario, use &#x27;zone-aware&#x27; policy by default</span></span><br><span class="line">    String cluster = registryURL.getParameter(CLUSTER_KEY, ZoneAwareCluster.NAME);</span><br><span class="line">    <span class="comment">// The invoker wrap sequence would be: ZoneAwareClusterInvoker(StaticDirectory) -&gt; FailoverClusterInvoker(RegistryDirectory, routing happens here) -&gt; Invoker</span></span><br><span class="line">    invoker = Cluster.getCluster(cluster, <span class="keyword">false</span>).join(<span class="keyword">new</span> StaticDirectory(registryURL, invokers));</span><br><span class="line">&#125; <span class="keyword">else</span> &#123; <span class="comment">// not a registry url, must be direct invoke.</span></span><br><span class="line">    String cluster = CollectionUtils.isNotEmpty(invokers)</span><br><span class="line">            ? (invokers.get(<span class="number">0</span>).getUrl() != <span class="keyword">null</span> ? invokers.get(<span class="number">0</span>).getUrl().getParameter(CLUSTER_KEY, ZoneAwareCluster.NAME) : Cluster.DEFAULT)</span><br><span class="line">            : Cluster.DEFAULT;</span><br><span class="line">    invoker = Cluster.getCluster(cluster).join(<span class="keyword">new</span> StaticDirectory(invokers));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2>具体协议的引用方法，以RegisterProtocol#refer为例<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">Invoker&lt;T&gt; <span class="title">refer</span><span class="params">(Class&lt;T&gt; type, URL url)</span> <span class="keyword">throws</span> RpcException </span>&#123;</span><br><span class="line">    url = getRegistryUrl(url);</span><br><span class="line">		<span class="comment">// 获取注册中心</span></span><br><span class="line">    Registry registry = registryFactory.getRegistry(url);</span><br><span class="line">    <span class="keyword">if</span> (RegistryService.class.equals(type)) &#123;</span><br><span class="line">        <span class="keyword">return</span> proxyFactory.getInvoker((T) registry, type, url);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// group=&quot;a,b&quot; or group=&quot;*&quot;</span></span><br><span class="line">    Map&lt;String, String&gt; qs = StringUtils.parseQueryString(url.getParameterAndDecoded(REFER_KEY));</span><br><span class="line">    String group = qs.get(GROUP_KEY);</span><br><span class="line">    <span class="keyword">if</span> (group != <span class="keyword">null</span> &amp;&amp; group.length() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((COMMA_SPLIT_PATTERN.split(group)).length &gt; <span class="number">1</span> || <span class="string">&quot;*&quot;</span>.equals(group)) &#123;</span><br><span class="line">            <span class="keyword">return</span> doRefer(Cluster.getCluster(MergeableCluster.NAME), registry, type, url);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Cluster cluster = Cluster.getCluster(qs.get(CLUSTER_KEY));</span><br><span class="line">		<span class="comment">// 引用具体的服务</span></span><br><span class="line">    <span class="keyword">return</span> doRefer(cluster, registry, type, url);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> &lt;T&gt; <span class="function">Invoker&lt;T&gt; <span class="title">doRefer</span><span class="params">(Cluster cluster, Registry registry, Class&lt;T&gt; type, URL url)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> interceptInvoker(getInvoker(cluster, registry, type, url), url);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> &lt;T&gt; <span class="function">ClusterInvoker&lt;T&gt; <span class="title">getInvoker</span><span class="params">(Cluster cluster, Registry registry, Class&lt;T&gt; type, URL url)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 封装成一个directory （invoker的集合）</span></span><br><span class="line">    DynamicDirectory&lt;T&gt; directory = createDirectory(type, url);</span><br><span class="line">    directory.setRegistry(registry);</span><br><span class="line">    directory.setProtocol(protocol);</span><br><span class="line">    <span class="comment">// all attributes of REFER_KEY</span></span><br><span class="line">    Map&lt;String, String&gt; parameters = <span class="keyword">new</span> HashMap&lt;String, String&gt;(directory.getConsumerUrl().getParameters());</span><br><span class="line">    URL urlToRegistry = <span class="keyword">new</span> URL(CONSUMER_PROTOCOL, parameters.remove(REGISTER_IP_KEY), <span class="number">0</span>, type.getName(), parameters);</span><br><span class="line">    <span class="keyword">if</span> (directory.isShouldRegister()) &#123;</span><br><span class="line">        directory.setRegisteredConsumerUrl(urlToRegistry);</span><br><span class="line">        registry.register(directory.getRegisteredConsumerUrl());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 建立路由规则链</span></span><br><span class="line">    directory.buildRouterChain(urlToRegistry);</span><br><span class="line">    <span class="comment">// 订阅provider</span></span><br><span class="line">    directory.subscribe(toSubscribeUrl(urlToRegistry));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 包装集群容错策略到invoker</span></span><br><span class="line">    <span class="keyword">return</span> (ClusterInvoker&lt;T&gt;) cluster.join(directory);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="代理类"><a href="#代理类" class="headerlink" title="代理类"></a>代理类</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> (T) PROXY_FACTORY.getProxy(invoker, ProtocolUtils.isGeneric(generic));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以Javassist动态代理为例</span></span><br><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">getProxy</span><span class="params">(Invoker&lt;T&gt; invoker, Class&lt;?&gt;[] interfaces)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (T) Proxy.getProxy(interfaces).newInstance(<span class="keyword">new</span> InvokerInvocationHandler(invoker));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+此处创建的代理类，会有一个成员变量，InvocationHandler<br>当进行Dubbo远程调用的时候，就会被对应的InvokerInvocationHandler进行方法拦截处理，把看似本地调用的方法变为远程调用</li>
+</ul>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"26b8e6758f16d4524e69","clientSecret":"ecfd9e9a439bcb8a4c4fd21f4677fa102c68b352","repo":"beastmouth.github.io","owner":"beastmouth","admin":["beastmouth"],"distractionFreeMode":false,"createIssueManually":true};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：Dubbo基础篇服务引用</li>
+        <li>Post author：大黄</li>
+        <li>Create time：2022-08-02 21:40:14</li>
+        <li>
+            Post link：https://huangbangjing.cn/2022/08/02/Dubbo基础篇服务引用/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2022/08/02/Dubbo%E5%9F%BA%E7%A1%80%E7%AF%87%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Dubbo基础篇远程调用</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/2022/08/02/Dubbo%E5%9F%BA%E7%A1%80%E7%AF%87%E6%9C%8D%E5%8A%A1%E6%9A%B4%E9%9C%B2/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Dubbo基础篇服务暴露</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2023&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">大黄</a>
+        </div>
+        
+            <script async  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+            <div class="icp-info info-item"><a target="_blank" rel="nofollow" href="https://beian.miit.gov.cn">浙ICP备2021039538号-1</a></div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">完整流程图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%A6%82%E6%8B%AC%E6%B5%81%E7%A8%8B"><span class="nav-text">一句话概括流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%BC%95%E7%94%A8%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%97%B6%E6%9C%BA"><span class="nav-text">服务引用的两个时机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A5%E5%8F%A3%E5%85%B3%E9%94%AE%E7%B1%BB-ReferenceConfig"><span class="nav-text">入口关键类 ReferenceConfig</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%BB%A3%E7%90%86%E7%B1%BB"><span class="nav-text">创建代理类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E7%94%A8"><span class="nav-text">引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E7%B1%BB"><span class="nav-text">代理类</span></a></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","hOffset":-20,"vOffset":-80,"width":200,"height":400},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

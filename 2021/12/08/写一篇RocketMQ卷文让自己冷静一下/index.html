@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="大黄">
+    
+    <title>
+        
+            写一篇RocketMQ卷文让自己冷静一下 |
+        
+        DH大黄
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/images/logo.svg">
+    
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"huangbangjing.cn","root":"/","language":"en","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066CC","avatar":"/images/avatar.svg","favicon":"/images/logo.svg","article_img_align":"center","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"background_img":"/images/bg.svg","description":"stay gold","backgound_img":"/images/bg.svg"},"scroll":{"progress_bar":{"enable":true},"percent":{"enable":true}}},"local_search":{"enable":true,"preload":true},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":true},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+  </script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                DH大黄
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                HOME
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                ARCHIVES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                CATEGORIES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/links"
+                            >
+                                LINKS
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">HOME</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">CATEGORIES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/links">LINKS</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">写一篇RocketMQ卷文让自己冷静一下</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.svg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">大黄</span>
+                        
+                            <span class="author-label">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2021-12-08 14:56:51</span>
+        <span class="mobile">2021-12-08 14:56</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/RocketMQ/">RocketMQ</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>3.8k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>17 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%8D%B7%E6%96%87%20background.jpeg"
+                      alt="RocketMQ卷文 background.jpeg"
+                ></p>
+<hr>
+<p>不吃（烧烤）不喝（奶茶可乐）看了好久才概括出这么一点点东西，希望大佬们能够有耐心看一看，遇到说的不对的地方，也欢迎在评论区或者私信与我交流</p>
+<p>另外完整版的代码注释，我在我的github上也添加了，感兴趣的小伙伴也可以点击这个链接去看一波 <a class="link"   target="_blank" rel="noopener" href="https://github.com/beastmouth/rocketmq" >github地址<i class="fas fa-external-link-alt"></i></a></p>
+<p>觉得我讲的有那么一点点道理，对你有那么一丢丢的帮助的，也可以给我一波点赞关注666哟～</p>
+<p>废话不多说，下面开始我的表演～</p>
+<h3 id="RocketMQ全局流程图"><a href="#RocketMQ全局流程图" class="headerlink" title="RocketMQ全局流程图"></a>RocketMQ全局流程图</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%8D%B7%E6%96%87%20%E5%85%A8%E6%B5%81%E7%A8%8B.jpeg"
+                      alt="RocketMQ卷文 全流程.jpeg"
+                ></p>
+<p>上来就是这么一大张图片，相信大家肯定完全不想看下去。（那么我为什么还要放在一开始呢？主要是为了能够让大家有一个全局的印象，然后后续复习的时候也可以根据这个流程图去具体复习）</p>
+<p>那么，下面我们就针对一些问题来具体描述RocketMQ的工作流程 <em>此处内容会不断补充，也欢迎大家把遇到的问题在评论区留下来</em></p>
+<h3 id="消息消费逻辑"><a href="#消息消费逻辑" class="headerlink" title="消息消费逻辑"></a>消息消费逻辑</h3><p>消息消费可以分为三大模块</p>
+<ul>
+<li>Rebalance</li>
+<li>拉取消息</li>
+<li>消费消息</li>
+</ul>
+<h4 id="Rebalance"><a href="#Rebalance" class="headerlink" title="Rebalance"></a>Rebalance</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%8D%B7%E6%96%87%20Rebalance%E6%B5%81%E7%A8%8B.jpeg"
+                      alt="RocketMQ卷文 Rebalance流程.jpeg"
+                ></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RebalanceImpl</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doRebalance</span><span class="params">(<span class="keyword">final</span> <span class="keyword">boolean</span> isOrder)</span> </span>&#123;</span><br><span class="line">  Map&lt;String, SubscriptionData&gt; subTable = <span class="keyword">this</span>.getSubscriptionInner();</span><br><span class="line">  <span class="keyword">if</span> (subTable != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 遍历每个主题的队列</span></span><br><span class="line">    <span class="comment">// subTable 会在 DefaultMQPushConsumerImpl 的 subscribe 和 unsubscribe 时修改</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">final</span> Map.Entry&lt;String, SubscriptionData&gt; entry : subTable.entrySet()) &#123;</span><br><span class="line">      <span class="keyword">final</span> String topic = entry.getKey();</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 对队列进行重新负载</span></span><br><span class="line">        <span class="keyword">this</span>.rebalanceByTopic(topic, isOrder);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!topic.startsWith(MixAll.RETRY_GROUP_TOPIC_PREFIX)) &#123;</span><br><span class="line">          log.warn(<span class="string">&quot;rebalanceByTopic Exception&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>.truncateMessageQueueNotMyTopic();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rebalanceByTopic</span><span class="params">(<span class="keyword">final</span> String topic, <span class="keyword">final</span> <span class="keyword">boolean</span> isOrder)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (messageModel) &#123;</span><br><span class="line">    <span class="keyword">case</span> BROADCASTING: &#123;</span><br><span class="line">      Set&lt;MessageQueue&gt; mqSet = <span class="keyword">this</span>.topicSubscribeInfoTable.get(topic);</span><br><span class="line">      <span class="keyword">if</span> (mqSet != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">boolean</span> changed = <span class="keyword">this</span>.updateProcessQueueTableInRebalance(topic, mqSet, isOrder);</span><br><span class="line">        <span class="keyword">if</span> (changed) &#123;</span><br><span class="line">          <span class="keyword">this</span>.messageQueueChanged(topic, mqSet, mqSet);</span><br><span class="line">          log.info(<span class="string">&quot;messageQueueChanged &#123;&#125; &#123;&#125; &#123;&#125; &#123;&#125;&quot;</span>,</span><br><span class="line">                   consumerGroup,</span><br><span class="line">                   topic,</span><br><span class="line">                   mqSet,</span><br><span class="line">                   mqSet);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        log.warn(<span class="string">&quot;doRebalance, &#123;&#125;, but the topic[&#123;&#125;] not exist.&quot;</span>, consumerGroup, topic);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">case</span> CLUSTERING: &#123;</span><br><span class="line">      <span class="comment">// topicSubscribeInfoTable topic订阅信息缓存表</span></span><br><span class="line">      Set&lt;MessageQueue&gt; mqSet = <span class="keyword">this</span>.topicSubscribeInfoTable.get(topic);</span><br><span class="line">      <span class="comment">// 发送请求到broker获取topic下该消费组内当前所有的消费者客户端id</span></span><br><span class="line">      List&lt;String&gt; cidAll = <span class="keyword">this</span>.mQClientFactory.findConsumerIdList(topic, consumerGroup);</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">null</span> == mqSet) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!topic.startsWith(MixAll.RETRY_GROUP_TOPIC_PREFIX)) &#123;</span><br><span class="line">          log.warn(<span class="string">&quot;doRebalance, &#123;&#125;, but the topic[&#123;&#125;] not exist.&quot;</span>, consumerGroup, topic);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">null</span> == cidAll) &#123;</span><br><span class="line">        log.warn(<span class="string">&quot;doRebalance, &#123;&#125; &#123;&#125;, get consumer id list failed&quot;</span>, consumerGroup, topic);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (mqSet != <span class="keyword">null</span> &amp;&amp; cidAll != <span class="keyword">null</span>) &#123;</span><br><span class="line">        List&lt;MessageQueue&gt; mqAll = <span class="keyword">new</span> ArrayList&lt;MessageQueue&gt;();</span><br><span class="line">        mqAll.addAll(mqSet);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 排序保证了同一个消费组内消费者看到的视图保持一致，确保同一个消费队列不会被多个消费者分配</span></span><br><span class="line">        Collections.sort(mqAll);</span><br><span class="line">        Collections.sort(cidAll);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 分配算法 （尽量使用前两种）</span></span><br><span class="line">        <span class="comment">// 默认有5种 1）平均分配 2）平均轮询分配 3）一致性hash</span></span><br><span class="line">        <span class="comment">// 4）根据配置 为每一个消费者配置固定的消息队列 5）根据broker部署机房名，对每个消费者负责不同的broker上的队列</span></span><br><span class="line">        <span class="comment">// 但是如果消费者数目大于消息队列数量，则会有些消费者无法消费消息</span></span><br><span class="line">        AllocateMessageQueueStrategy strategy = <span class="keyword">this</span>.allocateMessageQueueStrategy;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 当前消费者分配到的队列</span></span><br><span class="line">        List&lt;MessageQueue&gt; allocateResult = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          allocateResult = strategy.allocate(</span><br><span class="line">            <span class="keyword">this</span>.consumerGroup,</span><br><span class="line">            <span class="keyword">this</span>.mQClientFactory.getClientId(),</span><br><span class="line">            mqAll,</span><br><span class="line">            cidAll);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">          log.error(<span class="string">&quot;AllocateMessageQueueStrategy.allocate Exception. allocateMessageQueueStrategyName=&#123;&#125;&quot;</span>, strategy.getName(),</span><br><span class="line">                    e);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Set&lt;MessageQueue&gt; allocateResultSet = <span class="keyword">new</span> HashSet&lt;MessageQueue&gt;();</span><br><span class="line">        <span class="keyword">if</span> (allocateResult != <span class="keyword">null</span>) &#123;</span><br><span class="line">          allocateResultSet.addAll(allocateResult);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 更新消息消费队列，如果是新增的消息消费队列，则会创建一个消息拉取请求并立即执行拉取</span></span><br><span class="line">        <span class="keyword">boolean</span> changed = <span class="keyword">this</span>.updateProcessQueueTableInRebalance(topic, allocateResultSet, isOrder);</span><br><span class="line">        <span class="keyword">if</span> (changed) &#123;</span><br><span class="line">          log.info(</span><br><span class="line">            <span class="string">&quot;rebalanced result changed. allocateMessageQueueStrategyName=&#123;&#125;, group=&#123;&#125;, topic=&#123;&#125;, clientId=&#123;&#125;, mqAllSize=&#123;&#125;, cidAllSize=&#123;&#125;, rebalanceResultSize=&#123;&#125;, rebalanceResultSet=&#123;&#125;&quot;</span>,</span><br><span class="line">            strategy.getName(), consumerGroup, topic, <span class="keyword">this</span>.mQClientFactory.getClientId(), mqSet.size(), cidAll.size(),</span><br><span class="line">            allocateResultSet.size(), allocateResultSet);</span><br><span class="line">          <span class="keyword">this</span>.messageQueueChanged(topic, mqSet, allocateResultSet);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">updateProcessQueueTableInRebalance</span><span class="params">(<span class="keyword">final</span> String topic, <span class="keyword">final</span> Set&lt;MessageQueue&gt; mqSet,</span></span></span><br><span class="line"><span class="params"><span class="function">                                                   <span class="keyword">final</span> <span class="keyword">boolean</span> isOrder)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">boolean</span> changed = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">  Iterator&lt;Entry&lt;MessageQueue, ProcessQueue&gt;&gt; it = <span class="keyword">this</span>.processQueueTable.entrySet().iterator();</span><br><span class="line">  <span class="keyword">while</span> (it.hasNext()) &#123;</span><br><span class="line">    Entry&lt;MessageQueue, ProcessQueue&gt; next = it.next();</span><br><span class="line">    MessageQueue mq = next.getKey();</span><br><span class="line">    ProcessQueue pq = next.getValue();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (mq.getTopic().equals(topic)) &#123;</span><br><span class="line">      <span class="comment">// 当前分配到的队列中不包含原先的队列（说明当前队列被分配给了其他消费者）</span></span><br><span class="line">      <span class="keyword">if</span> (!mqSet.contains(mq)) &#123;</span><br><span class="line">        <span class="comment">// 丢弃 processQueue</span></span><br><span class="line">        pq.setDropped(<span class="keyword">true</span>);</span><br><span class="line">        <span class="comment">// 移除当前消息队列</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.removeUnnecessaryMessageQueue(mq, pq)) &#123;</span><br><span class="line">          it.remove();</span><br><span class="line">          changed = <span class="keyword">true</span>;</span><br><span class="line">          log.info(<span class="string">&quot;doRebalance, &#123;&#125;, remove unnecessary mq, &#123;&#125;&quot;</span>, consumerGroup, mq);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pq.isPullExpired()) &#123;</span><br><span class="line">        <span class="keyword">switch</span> (<span class="keyword">this</span>.consumeType()) &#123;</span><br><span class="line">          <span class="keyword">case</span> CONSUME_ACTIVELY:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">          <span class="keyword">case</span> CONSUME_PASSIVELY:</span><br><span class="line">            pq.setDropped(<span class="keyword">true</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.removeUnnecessaryMessageQueue(mq, pq)) &#123;</span><br><span class="line">              it.remove();</span><br><span class="line">              changed = <span class="keyword">true</span>;</span><br><span class="line">              log.error(<span class="string">&quot;[BUG]doRebalance, &#123;&#125;, remove unnecessary mq, &#123;&#125;, because pull is pause, so try to fixed it&quot;</span>,</span><br><span class="line">                        consumerGroup, mq);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">          <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  List&lt;PullRequest&gt; pullRequestList = <span class="keyword">new</span> ArrayList&lt;PullRequest&gt;();</span><br><span class="line">  <span class="keyword">for</span> (MessageQueue mq : mqSet) &#123;</span><br><span class="line">    <span class="comment">// 消息消费队列缓存中不存在当前队列 本次分配新增的队列</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.processQueueTable.containsKey(mq)) &#123;</span><br><span class="line">      <span class="comment">// 向broker发起锁定队列请求 (向broker端请求锁定MessageQueue,同时在本地锁定对应的ProcessQueue)</span></span><br><span class="line">      <span class="keyword">if</span> (isOrder &amp;&amp; !<span class="keyword">this</span>.lock(mq)) &#123;</span><br><span class="line">        log.warn(<span class="string">&quot;doRebalance, &#123;&#125;, add a new mq failed, &#123;&#125;, because lock failed&quot;</span>, consumerGroup, mq);</span><br><span class="line">        <span class="comment">// 加锁失败，跳过，等待下一次队列重新负载时再尝试加锁</span></span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 从内存中移除该消息队列的消费进度</span></span><br><span class="line">      <span class="keyword">this</span>.removeDirtyOffset(mq);</span><br><span class="line">      ProcessQueue pq = <span class="keyword">new</span> ProcessQueue();</span><br><span class="line"></span><br><span class="line">      <span class="keyword">long</span> nextOffset = -<span class="number">1L</span>;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        nextOffset = <span class="keyword">this</span>.computePullFromWhereWithException(mq);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.info(<span class="string">&quot;doRebalance, &#123;&#125;, compute offset failed, &#123;&#125;&quot;</span>, consumerGroup, mq);</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (nextOffset &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        ProcessQueue pre = <span class="keyword">this</span>.processQueueTable.putIfAbsent(mq, pq);</span><br><span class="line">        <span class="keyword">if</span> (pre != <span class="keyword">null</span>) &#123;</span><br><span class="line">          log.info(<span class="string">&quot;doRebalance, &#123;&#125;, mq already exists, &#123;&#125;&quot;</span>, consumerGroup, mq);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// 首次添加，构建拉取消息的请求</span></span><br><span class="line">          log.info(<span class="string">&quot;doRebalance, &#123;&#125;, add a new mq, &#123;&#125;&quot;</span>, consumerGroup, mq);</span><br><span class="line">          PullRequest pullRequest = <span class="keyword">new</span> PullRequest();</span><br><span class="line">          pullRequest.setConsumerGroup(consumerGroup);</span><br><span class="line">          pullRequest.setNextOffset(nextOffset);</span><br><span class="line">          pullRequest.setMessageQueue(mq);</span><br><span class="line">          pullRequest.setProcessQueue(pq);</span><br><span class="line">          pullRequestList.add(pullRequest);</span><br><span class="line">          changed = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        log.warn(<span class="string">&quot;doRebalance, &#123;&#125;, add new mq failed, &#123;&#125;&quot;</span>, consumerGroup, mq);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 立即拉取消息(对新增的队列)</span></span><br><span class="line">  <span class="keyword">this</span>.dispatchPullRequest(pullRequestList);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> changed;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由流程图和代码，我们可以得知，集群模式下消息负载主要有以下几个步骤：</p>
+<ol>
+<li>从Broker获取订阅当前Topic的消费者列表</li>
+<li>根据具体的策略进行负载均衡</li>
+<li>对当前消费者分配到的队列进行处理<ol>
+<li>原来有，现在没有：丢弃对应的消息处理队列（ProcessQueue）</li>
+<li>原来没有，现在有：添加消息处理队列（ProcessQueue），如果是第一次新增，还会创建一个消息拉取请求</li>
+</ol>
+</li>
+</ol>
+<h4 id="拉取消息"><a href="#拉取消息" class="headerlink" title="拉取消息"></a>拉取消息</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%8D%B7%E6%96%87%20%E6%8B%89%E5%8F%96%E6%B6%88%E6%81%AF%E6%B5%81%E7%A8%8B.jpeg"
+                      alt="RocketMQ卷文 拉取消息流程.jpeg"
+                ></p>
+<p>拉取消息的代码太多了，我就不再这里贴出来了。</p>
+<p>我在这里说一下大致流程，然后有几个需要注意的地方</p>
+<p>流程：在我们Rebalance第一次添加负责的队列和后续拉取消息后，都会再提交一个拉取请求到拉取请求队列（pullRequestQueue）中，然后有一个线程不停的去里面获取拉取请求，去执行拉取的操作</p>
+<p>这里说一个RocketMQ消费者这边设计的一个亮点</p>
+<p>它将拉取消息，消费消息通过两个任务队列的方式进行解耦，然后每一个模块仅需要负责它自己的功能。（虽然大佬们觉得很常见，但是当时我看的时候还是感觉妙呀～）</p>
+<p>另外还有一点需要注意的是：拉取消息的时候broker和consumer都会对消息进行过滤，只不过broker是根据tag的hash进行过滤的，而consumer是根据具体的tag字符串匹配过滤的。这也是有的时候，明明拉取到了消息，但是却没有需要消费的消息产生的原因</p>
+<p>既然说到了消息过滤，这边先简单提一下RocketMQ消息过滤的几种方式</p>
+<ul>
+<li>表达式过滤<ul>
+<li>tag</li>
+<li>SQL92</li>
+</ul>
+</li>
+<li>类过滤</li>
+</ul>
+<h4 id="消费消息"><a href="#消费消息" class="headerlink" title="消费消息"></a>消费消息</h4><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%8D%B7%E6%96%87%20%E6%B6%88%E8%B4%B9%E6%B6%88%E6%81%AF.jpeg"
+                      alt="RocketMQ卷文 消费消息.jpeg"
+                ></p>
+<p>这边也先说几个注意点吧，后面再单独出篇文章。</p>
+<p>（一）顺序消费和非顺序消费消费失败的处理</p>
+<p>（二）消费失败偏移量的更新：只有当前这批消息全部消费成功后，才会将偏移量更新成为这批消息最后一条的偏移量</p>
+<p>（三）广播消息失败不会重试，仅打印失败日志</p>
+<h4 id="补充：为什么同一个消费组下消费者的订阅信息要相同"><a href="#补充：为什么同一个消费组下消费者的订阅信息要相同" class="headerlink" title="补充：为什么同一个消费组下消费者的订阅信息要相同"></a>补充：为什么同一个消费组下消费者的订阅信息要相同</h4><p>首先，先说一下什么叫做同一个消费组下消费者的订阅信息要相同</p>
+<p>即：在相同的GroupId下，每一个消费者他们的订阅内容（Topic+Tag）要保持一致，否则会导致消息无法被正常消费</p>
+<p>参考文档：<a class="link"   target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/43523.html?spm=a2c4g.11186623.6.777.1dba3635aj4Own" >阿里云:订阅关系一致<i class="fas fa-external-link-alt"></i></a></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%8D%B7%E6%96%87%20Rebalance%E8%AF%A6%E6%83%85.jpeg"
+                      alt="RocketMQ卷文 Rebalance详情.jpeg"
+                ></p>
+<p>我们在看待这个问题的时候，可以把它分为两类情况考虑</p>
+<ul>
+<li>topic不一致</li>
+<li>tag不一致</li>
+</ul>
+<p>（一）topic不一致的问题</p>
+<p>首先先说一个场景，消费者A监听了TopicA，消费者B监听了TopicB，但是消费者A和消费者B同属一个groupTest</p>
+<p>在Rebalance阶段，消费者A对TopicA进行负载均衡时，会去查询groupTest下的所有消费者信息。获取到了消费者A和消费者B。此时就会将TopicA的队列对消费者A和消费者B进行负载均衡（例如消费者A分配到了1234四个队列，消费者B分配到了5678四个队列）。此时消费者B没有针对TopicA的处理逻辑，就会导致推送到5678这几个队列里面的消息没有办法得到处理。</p>
+<p>（二）tag不一致的问题</p>
+<p>随着消费者A，消费者B负载均衡的不断进行，会不断把最新的订阅信息（消息过滤规则）上报给broker。broker就会不断的覆盖更新，导致tag信息不停地变化，而tag的变化在消费者拉取消息时broker的过滤就会产生影响，会导致一些本来要被消费者拉取到的消息被broker过滤掉</p>
+<h4 id="消费者总结"><a href="#消费者总结" class="headerlink" title="消费者总结"></a>消费者总结</h4><p>讲了这么多的消费者的内容，出现了好多名词，也把消费者的一些比较核心的内容逐个讲了一遍。</p>
+<p>那么，在这里，我们将消费者这个模块里面的所有东西，在进行一个完整的串联。然后消费者这一方面的介绍就要告一段落了</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%8D%B7%E6%96%87%20%E6%B6%88%E8%B4%B9%E8%80%85%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B.jpeg"
+                      alt="RocketMQ卷文 消费者完整流程.jpeg"
+                ></p>
+<h3 id="延时队列是如何工作的"><a href="#延时队列是如何工作的" class="headerlink" title="延时队列是如何工作的"></a>延时队列是如何工作的</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://bb3e216f.onedrive-cf-index-ng-e34.pages.dev/api/raw?path=/Public/BlogImg/RocketMQ/RocketMQ%E5%8D%B7%E6%96%87%20%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97.png"
+                      alt="RocketMQ卷文 延迟队列.jpg"
+                ></p>
+<p>由流程图中我们不难看出，RocketMQ对延时消息的处理，是交由Timer去完成的（相关类ScheduleMessageService）。在Timer的任务队列中读取需要处理的延迟任务，将消息从延迟队列转发到具体的业务队列中</p>
+<p>此处补充一点：此处提到的Timer为java工具类包（java.util.Timer）下的一个定时任务工具。它主要由两个部分：TaskQueue queue（任务队列）和TimerThread thread（工作线程）。这边我把它简单的类比为一个单线程的工作线程池</p>
+<p>另外在ScheduleMessageService中使用到了Timer的两个方法，我在这里先单独列出来下</p>
+<ul>
+<li>this.timer.schedule ：在任务执行成功后，再加上对应的周期，然后再执行</li>
+<li>this.timer.scheduleAtFixedRate ：每隔指定时间就执行一次，与任务执行时间无关</li>
+</ul>
+<p>话不多少，贴上源码<em>（源码虽然枯燥，但希望可以耐心的看完）</em></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ScheduleMessageService</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (started.compareAndSet(<span class="keyword">false</span>, <span class="keyword">true</span>)) &#123;</span><br><span class="line">    <span class="keyword">super</span>.load();</span><br><span class="line">    <span class="keyword">this</span>.timer = <span class="keyword">new</span> Timer(<span class="string">&quot;ScheduleMessageTimerThread&quot;</span>, <span class="keyword">true</span>);</span><br><span class="line">    <span class="comment">// 根据延时队列创建对应的定时任务</span></span><br><span class="line">    <span class="keyword">for</span> (Map.Entry&lt;Integer, Long&gt; entry : <span class="keyword">this</span>.delayLevelTable.entrySet()) &#123;</span><br><span class="line">      Integer level = entry.getKey();</span><br><span class="line">      Long timeDelay = entry.getValue();</span><br><span class="line">      Long offset = <span class="keyword">this</span>.offsetTable.get(level);</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">null</span> == offset) &#123;</span><br><span class="line">        offset = <span class="number">0L</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (timeDelay != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// 第一次，延迟一秒执行任务，后续根据对应延时时间来执行</span></span><br><span class="line">        <span class="comment">// 延时级别和消息队列id对应关系 ： 消息队列id = 延时级别 - 1</span></span><br><span class="line">        <span class="comment">// shedule 在任务执行成功后，再加上对应的周期，然后再执行</span></span><br><span class="line">        <span class="keyword">this</span>.timer.schedule(<span class="keyword">new</span> DeliverDelayedMessageTimerTask(level, offset), FIRST_DELAY_TIME);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// scheduleAtFixedRate 每隔指定时间就执行一次，与任务执行时间无关</span></span><br><span class="line">    <span class="keyword">this</span>.timer.scheduleAtFixedRate(<span class="keyword">new</span> TimerTask() &#123;</span><br><span class="line"></span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (started.get()) &#123;</span><br><span class="line">            <span class="comment">// 每个十秒持久化一次延迟队列的处理进度</span></span><br><span class="line">            ScheduleMessageService.<span class="keyword">this</span>.persist();</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">          log.error(<span class="string">&quot;scheduleAtFixedRate flush exception&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;, <span class="number">10000</span>, <span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().getFlushDelayOffsetInterval());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DeliverDelayedMessageTimerTask</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (isStarted()) &#123;</span><br><span class="line">      <span class="keyword">this</span>.executeOnTimeup();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">XXX:</span> warn and notify me</span></span><br><span class="line">    log.error(<span class="string">&quot;ScheduleMessageService, executeOnTimeup exception&quot;</span>, e);</span><br><span class="line">    ScheduleMessageService.<span class="keyword">this</span>.timer.schedule(<span class="keyword">new</span> DeliverDelayedMessageTimerTask(</span><br><span class="line">      <span class="keyword">this</span>.delayLevel, <span class="keyword">this</span>.offset), DELAY_FOR_A_PERIOD);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">executeOnTimeup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 根据 延时队列topic 和 延时队列id 查找消费队列</span></span><br><span class="line">  ConsumeQueue cq =</span><br><span class="line">    ScheduleMessageService.<span class="keyword">this</span>.defaultMessageStore.findConsumeQueue(TopicValidator.RMQ_SYS_SCHEDULE_TOPIC,</span><br><span class="line">                                                                     delayLevel2QueueId(delayLevel));</span><br><span class="line"></span><br><span class="line">  <span class="keyword">long</span> failScheduleOffset = offset;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (cq != <span class="keyword">null</span>) &#123;</span><br><span class="line">    SelectMappedBufferResult bufferCQ = cq.getIndexBuffer(<span class="keyword">this</span>.offset);</span><br><span class="line">    <span class="keyword">if</span> (bufferCQ != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">long</span> nextOffset = offset;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 遍历ConsumeQueue，每一个标准的ConsumeQueue条目为20字节</span></span><br><span class="line">        ConsumeQueueExt.CqExtUnit cqExtUnit = <span class="keyword">new</span> ConsumeQueueExt.CqExtUnit();</span><br><span class="line">        <span class="keyword">for</span> (; i &lt; bufferCQ.getSize(); i += ConsumeQueue.CQ_STORE_UNIT_SIZE) &#123;</span><br><span class="line">          <span class="keyword">long</span> offsetPy = bufferCQ.getByteBuffer().getLong();</span><br><span class="line">          <span class="keyword">int</span> sizePy = bufferCQ.getByteBuffer().getInt();</span><br><span class="line">          <span class="keyword">long</span> tagsCode = bufferCQ.getByteBuffer().getLong();</span><br><span class="line"></span><br><span class="line">          <span class="keyword">if</span> (cq.isExtAddr(tagsCode)) &#123;</span><br><span class="line">            <span class="keyword">if</span> (cq.getExt(tagsCode, cqExtUnit)) &#123;</span><br><span class="line">              tagsCode = cqExtUnit.getTagsCode();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="comment">//can&#x27;t find ext content.So re compute tags code.</span></span><br><span class="line">              log.error(<span class="string">&quot;[BUG] can&#x27;t find consume queue extend file content!addr=&#123;&#125;, offsetPy=&#123;&#125;, sizePy=&#123;&#125;&quot;</span>,</span><br><span class="line">                        tagsCode, offsetPy, sizePy);</span><br><span class="line">              <span class="keyword">long</span> msgStoreTime = defaultMessageStore.getCommitLog().pickupStoreTimestamp(offsetPy, sizePy);</span><br><span class="line">              tagsCode = computeDeliverTimestamp(delayLevel, msgStoreTime);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">long</span> now = System.currentTimeMillis();</span><br><span class="line">          <span class="keyword">long</span> deliverTimestamp = <span class="keyword">this</span>.correctDeliverTimestamp(now, tagsCode);</span><br><span class="line"></span><br><span class="line">          nextOffset = offset + (i / ConsumeQueue.CQ_STORE_UNIT_SIZE);</span><br><span class="line"></span><br><span class="line">          <span class="comment">// &gt; 0 未到消息消费时间</span></span><br><span class="line">          <span class="keyword">long</span> countdown = deliverTimestamp - now;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">if</span> (countdown &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            MessageExt msgExt =</span><br><span class="line">              ScheduleMessageService.<span class="keyword">this</span>.defaultMessageStore.lookMessageByOffset(</span><br><span class="line">              offsetPy, sizePy);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (msgExt != <span class="keyword">null</span>) &#123;</span><br><span class="line">              <span class="keyword">try</span> &#123;</span><br><span class="line">                MessageExtBrokerInner msgInner = <span class="keyword">this</span>.messageTimeup(msgExt);</span><br><span class="line">                <span class="keyword">if</span> (TopicValidator.RMQ_SYS_TRANS_HALF_TOPIC.equals(msgInner.getTopic())) &#123;</span><br><span class="line">                  log.error(<span class="string">&quot;[BUG] the real topic of schedule msg is &#123;&#125;, discard the msg. msg=&#123;&#125;&quot;</span>,</span><br><span class="line">                            msgInner.getTopic(), msgInner);</span><br><span class="line">                  <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 放到对应的 %RETRY%+gid 重试topic下进行消费(转发消息)</span></span><br><span class="line">                PutMessageResult putMessageResult =</span><br><span class="line">                  ScheduleMessageService.<span class="keyword">this</span>.writeMessageStore</span><br><span class="line">                  .putMessage(msgInner);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (putMessageResult != <span class="keyword">null</span></span><br><span class="line">                    &amp;&amp; putMessageResult.getPutMessageStatus() == PutMessageStatus.PUT_OK) &#123;</span><br><span class="line">                  <span class="keyword">if</span> (ScheduleMessageService.<span class="keyword">this</span>.defaultMessageStore.getMessageStoreConfig().isEnableScheduleMessageStats()) &#123;</span><br><span class="line">                    ScheduleMessageService.<span class="keyword">this</span>.defaultMessageStore.getBrokerStatsManager().incQueueGetNums(MixAll.SCHEDULE_CONSUMER_GROUP, TopicValidator.RMQ_SYS_SCHEDULE_TOPIC, delayLevel - <span class="number">1</span>, putMessageResult.getAppendMessageResult().getMsgNum());</span><br><span class="line">                    ScheduleMessageService.<span class="keyword">this</span>.defaultMessageStore.getBrokerStatsManager().incQueueGetSize(MixAll.SCHEDULE_CONSUMER_GROUP, TopicValidator.RMQ_SYS_SCHEDULE_TOPIC, delayLevel - <span class="number">1</span>, putMessageResult.getAppendMessageResult().getWroteBytes());</span><br><span class="line">                    ScheduleMessageService.<span class="keyword">this</span>.defaultMessageStore.getBrokerStatsManager().incGroupGetNums(MixAll.SCHEDULE_CONSUMER_GROUP, TopicValidator.RMQ_SYS_SCHEDULE_TOPIC, putMessageResult.getAppendMessageResult().getMsgNum());</span><br><span class="line">                    ScheduleMessageService.<span class="keyword">this</span>.defaultMessageStore.getBrokerStatsManager().incGroupGetSize(MixAll.SCHEDULE_CONSUMER_GROUP, TopicValidator.RMQ_SYS_SCHEDULE_TOPIC, putMessageResult.getAppendMessageResult().getWroteBytes());</span><br><span class="line">                    ScheduleMessageService.<span class="keyword">this</span>.defaultMessageStore.getBrokerStatsManager().incTopicPutNums(msgInner.getTopic(), putMessageResult.getAppendMessageResult().getMsgNum(), <span class="number">1</span>);</span><br><span class="line">                    ScheduleMessageService.<span class="keyword">this</span>.defaultMessageStore.getBrokerStatsManager().incTopicPutSize(msgInner.getTopic(),</span><br><span class="line">                                                                                                            putMessageResult.getAppendMessageResult().getWroteBytes());</span><br><span class="line">                    ScheduleMessageService.<span class="keyword">this</span>.defaultMessageStore.getBrokerStatsManager().incBrokerPutNums(putMessageResult.getAppendMessageResult().getMsgNum());</span><br><span class="line">                  &#125;</span><br><span class="line">                  <span class="keyword">continue</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  <span class="comment">// <span class="doctag">XXX:</span> warn and notify me</span></span><br><span class="line">                  log.error(</span><br><span class="line">                    <span class="string">&quot;ScheduleMessageService, a message time up, but reput it failed, topic: &#123;&#125; msgId &#123;&#125;&quot;</span>,</span><br><span class="line">                    msgExt.getTopic(), msgExt.getMsgId());</span><br><span class="line">                  ScheduleMessageService.<span class="keyword">this</span>.timer.schedule(</span><br><span class="line">                    <span class="keyword">new</span> DeliverDelayedMessageTimerTask(<span class="keyword">this</span>.delayLevel,</span><br><span class="line">                                                       nextOffset), DELAY_FOR_A_PERIOD);</span><br><span class="line">                  ScheduleMessageService.<span class="keyword">this</span>.updateOffset(<span class="keyword">this</span>.delayLevel,</span><br><span class="line">                                                           nextOffset);</span><br><span class="line">                  <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">              &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                <span class="comment">/*</span></span><br><span class="line"><span class="comment">                                         * <span class="doctag">XXX:</span> warn and notify me</span></span><br><span class="line"><span class="comment">                                         */</span></span><br><span class="line">                log.error(</span><br><span class="line">                  <span class="string">&quot;ScheduleMessageService, messageTimeup execute error, drop it. msgExt=&#123;&#125;, nextOffset=&#123;&#125;, offsetPy=&#123;&#125;, sizePy=&#123;&#125;&quot;</span>, msgExt, nextOffset, offsetPy, sizePy, e);</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 会将下次任务执行时间设置为countdown 即 消息的延时转发时间-当前时间</span></span><br><span class="line">            ScheduleMessageService.<span class="keyword">this</span>.timer.schedule(</span><br><span class="line">              <span class="keyword">new</span> DeliverDelayedMessageTimerTask(<span class="keyword">this</span>.delayLevel, nextOffset),</span><br><span class="line">              countdown);</span><br><span class="line">            ScheduleMessageService.<span class="keyword">this</span>.updateOffset(<span class="keyword">this</span>.delayLevel, nextOffset);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="comment">// end of for</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 更新延时队列拉取任务进度</span></span><br><span class="line">        nextOffset = offset + (i / ConsumeQueue.CQ_STORE_UNIT_SIZE);</span><br><span class="line">        ScheduleMessageService.<span class="keyword">this</span>.timer.schedule(<span class="keyword">new</span> DeliverDelayedMessageTimerTask(</span><br><span class="line">          <span class="keyword">this</span>.delayLevel, nextOffset), DELAY_FOR_A_WHILE);</span><br><span class="line">        ScheduleMessageService.<span class="keyword">this</span>.updateOffset(<span class="keyword">this</span>.delayLevel, nextOffset);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line"></span><br><span class="line">        bufferCQ.release();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="comment">// end of if (bufferCQ != null)</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 消费队列不存在，默认为没有需要消费的任务，跳过本次消费</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">long</span> cqMinOffset = cq.getMinOffsetInQueue();</span><br><span class="line">      <span class="keyword">long</span> cqMaxOffset = cq.getMaxOffsetInQueue();</span><br><span class="line">      <span class="keyword">if</span> (offset &lt; cqMinOffset) &#123;</span><br><span class="line">        <span class="comment">// 下次拉取任务进度更新</span></span><br><span class="line">        failScheduleOffset = cqMinOffset;</span><br><span class="line">        log.error(<span class="string">&quot;schedule CQ offset invalid. offset=&#123;&#125;, cqMinOffset=&#123;&#125;, cqMaxOffset=&#123;&#125;, queueId=&#123;&#125;&quot;</span>,</span><br><span class="line">                  offset, cqMinOffset, cqMaxOffset, cq.getQueueId());</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (offset &gt; cqMaxOffset) &#123;</span><br><span class="line">        failScheduleOffset = cqMaxOffset;</span><br><span class="line">        log.error(<span class="string">&quot;schedule CQ offset invalid. offset=&#123;&#125;, cqMinOffset=&#123;&#125;, cqMaxOffset=&#123;&#125;, queueId=&#123;&#125;&quot;</span>,</span><br><span class="line">                  offset, cqMinOffset, cqMaxOffset, cq.getQueueId());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="comment">// end of if (cq != null)</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 根据延时等级创建一个任务</span></span><br><span class="line">  ScheduleMessageService.<span class="keyword">this</span>.timer.schedule(<span class="keyword">new</span> DeliverDelayedMessageTimerTask(<span class="keyword">this</span>.delayLevel,</span><br><span class="line">                                                                                failScheduleOffset), DELAY_FOR_A_WHILE);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"26b8e6758f16d4524e69","clientSecret":"ecfd9e9a439bcb8a4c4fd21f4677fa102c68b352","repo":"beastmouth.github.io","owner":"beastmouth","admin":["beastmouth"],"distractionFreeMode":false,"createIssueManually":true};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>Post title：写一篇RocketMQ卷文让自己冷静一下</li>
+        <li>Post author：大黄</li>
+        <li>Create time：2021-12-08 14:56:51</li>
+        <li>
+            Post link：https://huangbangjing.cn/2021/12/08/写一篇RocketMQ卷文让自己冷静一下/
+        </li>
+        <li>
+            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/2021/12/26/Update%E8%AF%AD%E5%8F%A5%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Update语句执行流程</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2021</span>
+              -
+            
+            2023&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">大黄</a>
+        </div>
+        
+            <script async  src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv">
+                        Visitor Count&nbsp;<span id="busuanzi_value_site_uv"></span>&ensp;
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv">
+                        Totalview&nbsp;<span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            Powered by <a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;|&nbsp;Theme&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+            <div class="icp-info info-item"><a target="_blank" rel="nofollow" href="https://beian.miit.gov.cn">浙ICP备2021039538号-1</a></div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#RocketMQ%E5%85%A8%E5%B1%80%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">RocketMQ全局流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E9%80%BB%E8%BE%91"><span class="nav-text">消息消费逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Rebalance"><span class="nav-text">Rebalance</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%89%E5%8F%96%E6%B6%88%E6%81%AF"><span class="nav-text">拉取消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E8%B4%B9%E6%B6%88%E6%81%AF"><span class="nav-text">消费消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E5%90%8C%E4%B8%80%E4%B8%AA%E6%B6%88%E8%B4%B9%E7%BB%84%E4%B8%8B%E6%B6%88%E8%B4%B9%E8%80%85%E7%9A%84%E8%AE%A2%E9%98%85%E4%BF%A1%E6%81%AF%E8%A6%81%E7%9B%B8%E5%90%8C"><span class="nav-text">补充：为什么同一个消费组下消费者的订阅信息要相同</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E6%80%BB%E7%BB%93"><span class="nav-text">消费者总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%B6%E6%97%B6%E9%98%9F%E5%88%97%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84"><span class="nav-text">延时队列是如何工作的</span></a></li></ol>
+    </div>
+</div>
+        </aside>
+    
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/dark-light-toggle.js"></script>
+
+
+
+    
+<script src="/js/local-search.js"></script>
+
+
+
+
+    
+<script src="/js/code-copy.js"></script>
+
+
+
+
+    
+<script src="/js/lazyload.js"></script>
+
+
+
+<div class="post-scripts">
+    
+        
+<script src="/js/left-side-toggle.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/toc.js"></script>
+
+    
+</div>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","hOffset":-20,"vOffset":-80,"width":200,"height":400},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
